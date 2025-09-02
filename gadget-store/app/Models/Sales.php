@@ -8,12 +8,15 @@ use App\Models\Product;
 class Sales extends Model
 {
     //
-     use HasFactory;
+    use HasFactory;
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'username',
-        'email_address',
-        'phone_number',
+        'emailaddress',
+        'phonenumber',
         'location',
         'state',
         'city',
@@ -23,6 +26,27 @@ class Sales extends Model
     protected $casts = [
         'product_ids' => 'array'
     ];
+
+    // Generate MongoDB-like ObjectId
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = self::generateObjectId();
+            }
+        });
+    }
+
+    public static function generateObjectId()
+    {
+        return sprintf('%08x%08x%08x',
+            time(),
+            mt_rand(0, 0xffffff),
+            mt_rand(0, 0xffffff)
+        );
+    }
 
     // Relationship to get products associated with this sale
     public function products()
@@ -45,4 +69,5 @@ class Sales extends Model
             $this->product_ids = $productIds;
         }
     }
+
 }

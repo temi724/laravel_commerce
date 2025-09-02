@@ -11,6 +11,10 @@ Route::get('/user', function (Request $request) {
 
 // Product API routes
 Route::apiResource('products', ProductController::class);
+Route::get('products/{id}', [ProductController::class, 'show']);
+Route::post('products', [ProductController::class, 'store']);
+Route::put('products/{id}', [ProductController::class, 'update']);
+
 
 // Sales API routes
 Route::apiResource('sales', SalesController::class);

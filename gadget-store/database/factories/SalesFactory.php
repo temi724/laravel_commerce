@@ -35,8 +35,8 @@ class SalesFactory extends Factory
 
         return [
             'username' => $this->faker->name(),
-            'email_address' => $this->faker->unique()->safeEmail(),
-            'phone_number' => $this->faker->randomElement([
+            'emailaddress' => $this->faker->unique()->safeEmail(),
+            'phonenumber' => $this->faker->randomElement([
                 '+234' . $this->faker->numerify('8#########'),
                 '+234' . $this->faker->numerify('9#########'),
                 '+234' . $this->faker->numerify('7#########'),

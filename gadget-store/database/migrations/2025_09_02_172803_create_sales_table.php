@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sales', function (Blueprint $table) {
-            $table->string('id', 24)->primary();
+            $table->string('id', 24)->primary(); // MongoDB-like ObjectId length
             $table->string('username');
             $table->string('emailaddress');
             $table->string('phonenumber');

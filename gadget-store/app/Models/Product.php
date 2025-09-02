@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+     // Disable auto-incrementing since we're using custom IDs
+    public $incrementing = false;
+     // Set key type to string
+    protected $keyType = 'string';
     // Fillable fields for mass assignment
     protected $fillable = [
+        'id',
         'product_name',
         'reviews',
         'price',
@@ -31,6 +36,26 @@ class Product extends Model
         'in_stock' => 'boolean',
     ];
 
+    // Generate MongoDB-like ObjectId
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = self::generateObjectId();
+            }
+        });
+    }
+
+      public static function generateObjectId()
+    {
+        return sprintf('%08x%08x%08x',
+            time(),
+            mt_rand(0, 0xffffff),
+            mt_rand(0, 0xffffff)
+        );
+    }
     //     // Accessor to get storage options from specification
     // public function getStorageOptionsAttribute()
     // {
