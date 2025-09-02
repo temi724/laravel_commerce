@@ -16,12 +16,14 @@ class Product extends Model
     protected $fillable = [
         'id',
         'product_name',
+        'category_id',
         'reviews',
         'price',
         'overview',
         'description',
         'about',
         'images_url',
+        'colors',
         'what_is_included',
         'specification',
         'in_stock',
@@ -30,6 +32,7 @@ class Product extends Model
       protected $casts = [
         'reviews' => 'array',
         'images_url' => 'array',
+        'colors' => 'array',
         'what_is_included' => 'array',
         'specification' => 'array',
         'price' => 'decimal:2',
@@ -73,5 +76,17 @@ class Product extends Model
     // {
     //     return $query->where('in_stock', true);
     // }
+
+    // Relationship with category
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    // Scope to filter products by category
+    public function scopeByCategory($query, $categoryId)
+    {
+        return $query->where('category_id', $categoryId);
+    }
 
 }

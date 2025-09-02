@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Category;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -29,6 +30,7 @@ class ProductFactory extends Factory
 
         return [
             'product_name' => $this->faker->randomElement($phoneModels) . ' ' . $this->faker->word(),
+            'category_id' => Category::inRandomOrder()->first()?->id ?? Category::factory()->create()->id,
             'reviews' => [
                 $this->faker->sentence(10),
                 $this->faker->sentence(8),
@@ -42,6 +44,20 @@ class ProductFactory extends Factory
                 $this->faker->imageUrl(400, 400, 'technics'),
                 $this->faker->imageUrl(400, 400, 'technics'),
                 $this->faker->imageUrl(400, 400, 'technics'),
+            ],
+            'colors' => [
+                [
+                    'path' => $this->faker->imageUrl(200, 200, 'abstract'),
+                    'name' => $this->faker->randomElement(['Space Black', 'Silver', 'Gold', 'Deep Purple', 'Blue'])
+                ],
+                [
+                    'path' => $this->faker->imageUrl(200, 200, 'abstract'),
+                    'name' => $this->faker->randomElement(['Midnight', 'Starlight', 'Pink', 'Green', 'Red'])
+                ],
+                [
+                    'path' => $this->faker->imageUrl(200, 200, 'abstract'),
+                    'name' => $this->faker->randomElement(['White', 'Black', 'Rose Gold', 'Coral', 'Yellow'])
+                ]
             ],
             'what_is_included' => [
                 'Device',

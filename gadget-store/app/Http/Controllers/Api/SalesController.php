@@ -23,12 +23,14 @@ class SalesController extends Controller
     {
         $validated = $request->validate([
             'username' => 'required|string',
-            'email_address' => 'required|email',
-            'phone_number' => 'required|string',
+            'emailaddress' => 'required|email',
+            'phonenumber' => 'required|string',
             'location' => 'required|string',
             'state' => 'required|string',
             'city' => 'required|string',
             'product_ids' => 'required|array',
+            'order_status' => 'boolean',
+            'order_type' => 'in:pickup,delivery',
         ]);
 
         $sale = Sales::create($validated);
@@ -53,12 +55,14 @@ class SalesController extends Controller
 
         $validated = $request->validate([
             'username' => 'sometimes|string',
-            'email_address' => 'sometimes|email',
-            'phone_number' => 'sometimes|string',
+            'emailaddress' => 'sometimes|email',
+            'phonenumber' => 'sometimes|string',
             'location' => 'sometimes|string',
             'state' => 'sometimes|string',
             'city' => 'sometimes|string',
             'product_ids' => 'sometimes|array',
+            'order_status' => 'sometimes|boolean',
+            'order_type' => 'sometimes|in:pickup,delivery',
         ]);
 
         $sale->update($validated);

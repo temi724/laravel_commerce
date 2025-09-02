@@ -20,11 +20,14 @@ class Sales extends Model
         'location',
         'state',
         'city',
-        'product_ids'
+        'product_ids',
+        'order_status',
+        'order_type'
     ];
 
     protected $casts = [
-        'product_ids' => 'array'
+        'product_ids' => 'array',
+        'order_status' => 'boolean'
     ];
 
     // Generate MongoDB-like ObjectId

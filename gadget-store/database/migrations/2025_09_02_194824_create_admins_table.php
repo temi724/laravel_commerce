@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->string('id', 24)->primary();
-            $table->string('username');
-            $table->string('emailaddress');
-            $table->string('phonenumber');
-            $table->string('location');
-            $table->string('state');
-            $table->string('city');
-            $table->json('product_ids'); // Array of product IDs
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('phone_number');
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('admins');
     }
 };

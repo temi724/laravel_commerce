@@ -45,6 +45,8 @@ class SalesFactory extends Factory
             'state' => $selectedState,
             'city' => $selectedCity,
             'product_ids' => $selectedProducts,
+            'order_status' => $this->faker->boolean(30), // 30% chance of being completed
+            'order_type' => $this->faker->randomElement(['pickup', 'delivery']),
         ];
     }
 }
