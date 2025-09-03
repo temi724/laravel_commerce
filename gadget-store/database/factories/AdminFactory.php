@@ -19,6 +19,7 @@ class AdminFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
+            'password' => 'password', // Default password, will be hashed by the model
             'phone_number' => $this->faker->phoneNumber(),
         ];
     }

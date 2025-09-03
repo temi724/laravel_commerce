@@ -9,7 +9,21 @@ use Illuminate\Support\Facades\Log;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/products",
+     *     summary="Get all products",
+     *     description="Retrieve a list of all products (public access)",
+     *     operationId="getProducts",
+     *     tags={"Products"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/Product")
+     *         )
+     *     )
+     * )
      */
     public function index()
     {
@@ -17,7 +31,36 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/products",
+     *     summary="Create a new product",
+     *     description="Create a new product (requires admin authentication)",
+     *     operationId="createProduct",
+     *     tags={"Products"},
+     *     security={{"AdminAuth": {}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Product data",
+     *         @OA\JsonContent(ref="#/components/schemas/ProductRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Product created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product created successfully"),
+     *             @OA\Property(property="product", ref="#/components/schemas/Product"),
+     *             @OA\Property(property="created_by_admin", type="string", example="Admin Name")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Admin authentication required"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -52,7 +95,29 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/products/{id}",
+     *     summary="Get product by ID",
+     *     description="Retrieve a specific product by its ID (public access)",
+     *     operationId="getProductById",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Product ID",
+     *         required=true,
+     *         @OA\Schema(type="string", example="68b74ba7002cda59000d800c")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/Product")
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found"
+     *     )
+     * )
      */
     public function show(string $id)
     {
@@ -61,7 +126,42 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/products/{id}",
+     *     summary="Update product",
+     *     description="Update an existing product (requires admin authentication)",
+     *     operationId="updateProduct",
+     *     tags={"Products"},
+     *     security={{"AdminAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Product ID",
+     *         required=true,
+     *         @OA\Schema(type="string", example="68b74ba7002cda59000d800c")
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Product data to update",
+     *         @OA\JsonContent(ref="#/components/schemas/ProductRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product updated successfully"),
+     *             @OA\Property(property="product", ref="#/components/schemas/Product"),
+     *             @OA\Property(property="updated_by_admin", type="string", example="Admin Name")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Admin authentication required"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found"
+     *     )
+     * )
      */
     public function update(Request $request, string $id)
     {
@@ -98,7 +198,38 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/products/{id}",
+     *     summary="Delete product",
+     *     description="Delete a product (requires admin authentication)",
+     *     operationId="deleteProduct",
+     *     tags={"Products"},
+     *     security={{"AdminAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Product ID",
+     *         required=true,
+     *         @OA\Schema(type="string", example="68b74ba7002cda59000d800c")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product deleted successfully"),
+     *             @OA\Property(property="deleted_product", type="string", example="iPhone 15 Pro"),
+     *             @OA\Property(property="deleted_by_admin", type="string", example="Admin Name")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Admin authentication required"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found"
+     *     )
+     * )
      */
     public function destroy(Request $request, string $id)
     {

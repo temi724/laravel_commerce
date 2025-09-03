@@ -5,6 +5,59 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @OA\Schema(
+ *     schema="Product",
+ *     type="object",
+ *     title="Product",
+ *     description="Product model",
+ *     @OA\Property(property="id", type="string", example="68b74ba7002cda59000d800c"),
+ *     @OA\Property(property="product_name", type="string", example="iPhone 15 Pro"),
+ *     @OA\Property(property="category_id", type="string", nullable=true, example="68b74ba7002cda59000d800d"),
+ *     @OA\Property(property="price", type="number", format="float", example=999.99),
+ *     @OA\Property(property="overview", type="string", nullable=true, example="Latest iPhone with advanced features"),
+ *     @OA\Property(property="description", type="string", nullable=true, example="Detailed product description"),
+ *     @OA\Property(property="about", type="string", nullable=true, example="About this product"),
+ *     @OA\Property(property="reviews", type="array", @OA\Items(type="object"), nullable=true),
+ *     @OA\Property(property="images_url", type="array", @OA\Items(type="string"), nullable=true),
+ *     @OA\Property(property="colors", type="array", @OA\Items(type="object"), nullable=true),
+ *     @OA\Property(property="what_is_included", type="array", @OA\Items(type="string"), nullable=true),
+ *     @OA\Property(property="specification", type="object", nullable=true),
+ *     @OA\Property(property="in_stock", type="boolean", example=true),
+ *     @OA\Property(property="created_at", type="string", format="date-time"),
+ *     @OA\Property(property="updated_at", type="string", format="date-time")
+ * )
+ * 
+ * @OA\Schema(
+ *     schema="ProductRequest",
+ *     type="object",
+ *     title="Product Request",
+ *     description="Product creation/update request",
+ *     required={"product_name", "price", "in_stock"},
+ *     @OA\Property(property="product_name", type="string", example="iPhone 15 Pro"),
+ *     @OA\Property(property="category_id", type="string", nullable=true, example="68b74ba7002cda59000d800d"),
+ *     @OA\Property(property="price", type="number", format="float", example=999.99),
+ *     @OA\Property(property="overview", type="string", nullable=true, example="Latest iPhone with advanced features"),
+ *     @OA\Property(property="description", type="string", nullable=true, example="Detailed product description"),
+ *     @OA\Property(property="about", type="string", nullable=true, example="About this product"),
+ *     @OA\Property(property="reviews", type="array", @OA\Items(type="object"), nullable=true),
+ *     @OA\Property(property="images_url", type="array", @OA\Items(type="string"), nullable=true),
+ *     @OA\Property(
+ *         property="colors", 
+ *         type="array", 
+ *         @OA\Items(
+ *             type="object",
+ *             @OA\Property(property="path", type="string", example="/images/blue.jpg"),
+ *             @OA\Property(property="name", type="string", example="Blue")
+ *         ), 
+ *         nullable=true
+ *     ),
+ *     @OA\Property(property="what_is_included", type="array", @OA\Items(type="string"), nullable=true),
+ *     @OA\Property(property="specification", type="object", nullable=true),
+ *     @OA\Property(property="in_stock", type="boolean", example=true)
+ * )
+ */
+
 class Product extends Model
 {
     use HasFactory;

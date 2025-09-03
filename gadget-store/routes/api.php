@@ -34,8 +34,9 @@ Route::apiResource('categories', CategoryController::class);
 Route::get('categories/{id}/products', [CategoryController::class, 'showWithProducts']);
 
 // Admin API routes
-Route::apiResource('admins', AdminController::class);
-
+// Route::apiResource('admins', AdminController::class);
+Route::post('admin/login', [AdminController::class, 'login']);
+// Route::post('admin/create', [AdminController::class, 'store']);
 // Custom routes if needed
 // Route::get('/products/in-stock', [ProductController::class, 'inStock']);
 // Route::post('/sales/{id}/add-product', [SalesController::class, 'addProduct']);

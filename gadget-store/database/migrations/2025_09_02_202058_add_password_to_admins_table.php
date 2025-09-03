@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('admins', function (Blueprint $table) {
-            $table->string('id', 24)->primary(); // MongoDB-like ObjectId length
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('phone_number');
-            $table->timestamps();
+        Schema::table('admins', function (Blueprint $table) {
+            $table->string('password')->after('email');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admins');
+        Schema::table('admins', function (Blueprint $table) {
+            $table->dropColumn('password');
+        });
     }
 };
