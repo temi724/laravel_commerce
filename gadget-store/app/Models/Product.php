@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  *     @OA\Property(property="created_at", type="string", format="date-time"),
  *     @OA\Property(property="updated_at", type="string", format="date-time")
  * )
- * 
+ *
  * @OA\Schema(
  *     schema="ProductRequest",
  *     type="object",
@@ -43,13 +43,13 @@ use Illuminate\Database\Eloquent\Model;
  *     @OA\Property(property="reviews", type="array", @OA\Items(type="object"), nullable=true),
  *     @OA\Property(property="images_url", type="array", @OA\Items(type="string"), nullable=true),
  *     @OA\Property(
- *         property="colors", 
- *         type="array", 
+ *         property="colors",
+ *         type="array",
  *         @OA\Items(
  *             type="object",
  *             @OA\Property(property="path", type="string", example="/images/blue.jpg"),
  *             @OA\Property(property="name", type="string", example="Blue")
- *         ), 
+ *         ),
  *         nullable=true
  *     ),
  *     @OA\Property(property="what_is_included", type="array", @OA\Items(type="string"), nullable=true),
@@ -61,10 +61,9 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-     // Disable auto-incrementing since we're using custom IDs
-    public $incrementing = false;
-     // Set key type to string
+
     protected $keyType = 'string';
+    public $incrementing = false;
     // Fillable fields for mass assignment
     protected $fillable = [
         'id',

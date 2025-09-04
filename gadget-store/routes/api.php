@@ -14,8 +14,9 @@ Route::get('/user', function (Request $request) {
 
 // Product API routes - Public routes
 Route::get('products', [ProductController::class, 'index']);
-Route::get('products/{id}', [ProductController::class, 'show']);
+Route::get('products/search', [ProductController::class, 'search']);
 Route::get('products/category/{categoryId}', [ProductController::class, 'productsByCategory']);
+Route::get('products/{id}', [ProductController::class, 'show']);
 
 // Product API routes - Admin protected routes
 Route::middleware('admin.auth')->group(function () {

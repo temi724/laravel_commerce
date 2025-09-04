@@ -1,0 +1,353 @@
+{
+  "info": {
+    "name": "Laravel Commerce - Product Search API",
+    "description": "Complete collection for testing product search functionality",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Basic Product Search",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products/search?q=phone",
+          "host": ["{{base_url}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "phone"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has search_query\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('search_query');",
+              "    pm.expect(jsonData.search_query).to.eql('phone');",
+              "});",
+              "",
+              "pm.test(\"Response has pagination data\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('current_page');",
+              "    pm.expect(jsonData).to.have.property('total');",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search with Price Filter",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products/search?q=product&min_price=100&max_price=1000",
+          "host": ["{{base_url}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "product"
+            },
+            {
+              "key": "min_price",
+              "value": "100"
+            },
+            {
+              "key": "max_price",
+              "value": "1000"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Price filters are applied\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.filters_applied.min_price).to.eql(\"100\");",
+              "    pm.expect(jsonData.filters_applied.max_price).to.eql(\"1000\");",
+              "});",
+              "",
+              "pm.test(\"All products are within price range\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    jsonData.data.forEach(function(product) {",
+              "        pm.expect(product.price).to.be.at.least(100);",
+              "        pm.expect(product.price).to.be.at.most(1000);",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search with Stock Filter",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products/search?q=product&in_stock=true&per_page=5",
+          "host": ["{{base_url}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "product"
+            },
+            {
+              "key": "in_stock",
+              "value": "true"
+            },
+            {
+              "key": "per_page",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Stock filter is applied\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.filters_applied.in_stock).to.be.true;",
+              "});",
+              "",
+              "pm.test(\"All products are in stock\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    jsonData.data.forEach(function(product) {",
+              "        pm.expect(product.in_stock).to.be.true;",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search with Pagination",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products/search?q=product&per_page=3&page=1",
+          "host": ["{{base_url}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "product"
+            },
+            {
+              "key": "per_page",
+              "value": "3"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Pagination is working\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.per_page).to.eql(3);",
+              "    pm.expect(jsonData.current_page).to.eql(1);",
+              "    pm.expect(jsonData.data.length).to.be.at.most(3);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Advanced Search (All Filters)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products/search?q=phone&min_price=500&max_price=1500&in_stock=true&per_page=5",
+          "host": ["{{base_url}}"],
+          "path": ["products", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "phone"
+            },
+            {
+              "key": "min_price",
+              "value": "500"
+            },
+            {
+              "key": "max_price",
+              "value": "1500"
+            },
+            {
+              "key": "in_stock",
+              "value": "true"
+            },
+            {
+              "key": "per_page",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"All filters are applied\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.search_query).to.eql('phone');",
+              "    pm.expect(jsonData.filters_applied.min_price).to.eql(\"500\");",
+              "    pm.expect(jsonData.filters_applied.max_price).to.eql(\"1500\");",
+              "    pm.expect(jsonData.filters_applied.in_stock).to.be.true;",
+              "});",
+              "",
+              "pm.test(\"Results match all criteria\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    jsonData.data.forEach(function(product) {",
+              "        pm.expect(product.price).to.be.at.least(500);",
+              "        pm.expect(product.price).to.be.at.most(1500);",
+              "        pm.expect(product.in_stock).to.be.true;",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search Validation Error",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/products/search",
+          "host": ["{{base_url}}"],
+          "path": ["products", "search"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 422\", function () {",
+              "    pm.response.to.have.status(422);",
+              "});",
+              "",
+              "pm.test(\"Validation error for missing query\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('message');",
+              "    pm.expect(jsonData).to.have.property('errors');",
+              "    pm.expect(jsonData.errors).to.have.property('q');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Categories (Helper)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/categories",
+          "host": ["{{base_url}}"],
+          "path": ["categories"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is array\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});",
+              "",
+              "// Save first category ID for use in other requests",
+              "var jsonData = pm.response.json();",
+              "if (jsonData.length > 0) {",
+              "    pm.environment.set(\"category_id\", jsonData[0].id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api",
+      "type": "string"
+    }
+  ]
+}

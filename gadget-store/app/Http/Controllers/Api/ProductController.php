@@ -11,23 +11,47 @@ class ProductController extends Controller
     /**
      * @OA\Get(
      *     path="/products",
-     *     summary="Get all products",
-     *     description="Retrieve a list of all products (public access)",
+     *     summary="Get all products with pagination",
+     *     description="Retrieve a paginated list of all products (public access)",
      *     operationId="getProducts",
      *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Items per page (max 100)",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=15)
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Product")
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Product")
+     *             ),
+     *             @OA\Property(property="current_page", type="integer", example=1),
+     *             @OA\Property(property="last_page", type="integer", example=5),
+     *             @OA\Property(property="per_page", type="integer", example=15),
+     *             @OA\Property(property="total", type="integer", example=75),
+     *             @OA\Property(property="from", type="integer", example=1),
+     *             @OA\Property(property="to", type="integer", example=15)
      *         )
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Product::latest()->get();
+        $perPage = min($request->get('per_page', 15), 100); // Max 100 items per page
+        return Product::latest()->paginate($perPage);
     }
 
     /**
@@ -248,9 +272,201 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function productsByCategory(string $categoryId)
+    /**
+     * @OA\Get(
+     *     path="/products/search",
+     *     summary="Search products",
+     *     description="Search products by name, description, or category with pagination",
+     *     operationId="searchProducts",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Search query (searches in product name, description, overview, about fields)",
+     *         required=true,
+     *         @OA\Schema(type="string", example="iPhone")
+     *     ),
+     *     @OA\Parameter(
+     *         name="category_id",
+     *         in="query",
+     *         description="Filter by category ID",
+     *         required=false,
+     *         @OA\Schema(type="string", example="68b74ba7002cda59000d800d")
+     *     ),
+     *     @OA\Parameter(
+     *         name="min_price",
+     *         in="query",
+     *         description="Minimum price filter",
+     *         required=false,
+     *         @OA\Schema(type="number", format="float", example=100.00)
+     *     ),
+     *     @OA\Parameter(
+     *         name="max_price",
+     *         in="query",
+     *         description="Maximum price filter",
+     *         required=false,
+     *         @OA\Schema(type="number", format="float", example=1000.00)
+     *     ),
+     *     @OA\Parameter(
+     *         name="in_stock",
+     *         in="query",
+     *         description="Filter by stock status",
+     *         required=false,
+     *         @OA\Schema(type="boolean", example=true)
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Items per page (max 100)",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=15)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Search results",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Product")
+     *             ),
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="last_page", type="integer"),
+     *             @OA\Property(property="per_page", type="integer"),
+     *             @OA\Property(property="total", type="integer"),
+     *             @OA\Property(property="search_query", type="string"),
+     *             @OA\Property(property="filters_applied", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error - search query required"
+     *     )
+     * )
+     */
+    public function search(Request $request)
     {
-        $products = Product::byCategory($categoryId)->get();
-        return response()->json($products);
+        $request->validate([
+            'q' => 'required|string|min:1',
+            'category_id' => 'nullable|string|exists:categories,id',
+            'min_price' => 'nullable|numeric|min:0',
+            'max_price' => 'nullable|numeric|min:0',
+            'in_stock' => 'nullable|boolean',
+            'page' => 'nullable|integer|min:1',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        $query = Product::query();
+
+        // Search in multiple fields
+        $searchTerm = $request->get('q');
+        $query->where(function ($q) use ($searchTerm) {
+            $q->where('product_name', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('description', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('overview', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('about', 'LIKE', "%{$searchTerm}%");
+        });
+
+        // Apply filters
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->get('category_id'));
+        }
+
+        if ($request->has('min_price')) {
+            $query->where('price', '>=', $request->get('min_price'));
+        }
+
+        if ($request->has('max_price')) {
+            $query->where('price', '<=', $request->get('max_price'));
+        }
+
+        if ($request->has('in_stock')) {
+            $query->where('in_stock', $request->boolean('in_stock'));
+        }
+
+        // Pagination
+        $perPage = min($request->get('per_page', 15), 100);
+        $results = $query->latest()->paginate($perPage);
+
+        // Add search metadata to response
+        $results = $results->toArray();
+        $results['search_query'] = $searchTerm;
+        $results['filters_applied'] = [
+            'category_id' => $request->get('category_id'),
+            'min_price' => $request->get('min_price'),
+            'max_price' => $request->get('max_price'),
+            'in_stock' => $request->get('in_stock')
+        ];
+
+        return response()->json($results);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/products/category/{categoryId}",
+     *     summary="Get products by category with pagination",
+     *     description="Retrieve products from a specific category with pagination",
+     *     operationId="getProductsByCategory",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="categoryId",
+     *         in="path",
+     *         description="Category ID",
+     *         required=true,
+     *         @OA\Schema(type="string", example="68b74ba7002cda59000d800d")
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Items per page (max 100)",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=15)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Product")
+     *             ),
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="last_page", type="integer"),
+     *             @OA\Property(property="per_page", type="integer"),
+     *             @OA\Property(property="total", type="integer"),
+     *             @OA\Property(property="category_id", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Category not found"
+     *     )
+     * )
+     */
+    public function productsByCategory(Request $request, string $categoryId)
+    {
+        $perPage = min($request->get('per_page', 15), 100);
+        $products = Product::byCategory($categoryId)->latest()->paginate($perPage);
+
+        // Add category_id to response metadata
+        $response = $products->toArray();
+        $response['category_id'] = $categoryId;
+
+        return response()->json($response);
     }
 }
