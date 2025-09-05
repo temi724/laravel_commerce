@@ -546,18 +546,43 @@ class SalesManager extends Component
         return $products;
     }
 
-    public function calculateOrderTotal($productIds)
-    {
+    // public function calculateOrderTotal($productIds)
+    // {
+    //     $total = 0;
+    //     $products = $this->getOrderProducts($productIds);
+
+    //     foreach ($products as $product) {
+    //         $total += $product->price;
+    //     }
+
+    //     return $total;
+    // }
+
+
+    public function getOrderTotal($sale)
+{
+    if (!empty($sale->order_details) && is_array($sale->order_details)) {
         $total = 0;
-        $products = $this->getOrderProducts($productIds);
-
-        foreach ($products as $product) {
-            $total += $product->price;
+        foreach ($sale->order_details as $item) {
+            $total += $item['subtotal'] ?? 0;
         }
-
         return $total;
     }
 
+    // Fallback to old calculation if order_details is empty
+    if (!empty($sale->product_ids) && is_array($sale->product_ids)) {
+        $total = 0;
+        foreach ($sale->product_ids as $productId) {
+            $product = Product::find($productId) ?? Deal::find($productId);
+            if ($product) {
+                $total += $product->price;
+            }
+        }
+        return $total;
+    }
+
+    return 0;
+}
     public function render()
     {
         Log::info('SalesManager rendering - expandedRows: ' . count($this->expandedRows));

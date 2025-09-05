@@ -240,7 +240,7 @@
 
                         <!-- Beautiful Cart Items -->
                         <div class="space-y-3 mb-6">
-                            @foreach($cartItems as $item)
+                            @foreach($cartItems as $index => $item)
                                 <div class="bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-2xl p-4 border border-gray-100 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
@@ -250,11 +250,11 @@
                                                      class="h-16 w-16 object-cover transform hover:scale-110 transition-transform duration-300">
                                                 <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-xl"></div>
                                             </div>
-                                            <div class="ml-4">
+                                            <div class="ml-4 flex-1">
                                                 <h3 class="font-bold text-lg text-gray-900 mb-1">
                                                     {{ $item['name'] }}
                                                 </h3>
-                                                <div class="flex items-center space-x-3">
+                                                <div class="flex items-center space-x-3 mb-2">
                                                     <span class="text-sm text-gray-600 bg-white px-3 py-1 rounded-full border border-blue-100 shadow-sm">
                                                         Qty: {{ $item['quantity'] }}
                                                     </span>
@@ -262,6 +262,14 @@
                                                         ₦{{ number_format($item['price'], 2) }} each
                                                     </span>
                                                 </div>
+
+                                                @if(!empty($item['selected_storage']))
+                                                    <div class="mt-1">
+                                                        <span class="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded-full">
+                                                            ✓ Storage: {{ $item['selected_storage'] }}
+                                                        </span>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="text-right">

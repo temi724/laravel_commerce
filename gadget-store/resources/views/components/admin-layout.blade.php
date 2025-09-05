@@ -45,6 +45,42 @@
             </div>
         </nav>
 
+        <!-- Admin Navigation Tabs -->
+        <div class="bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4">
+                <nav class="flex space-x-8" aria-label="Tabs">
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap {{ request()->routeIs('admin.dashboard*') ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2H3z"></path>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="{{ route('admin.products') }}"
+                       class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap {{ request()->routeIs('admin.products*') ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        Products
+                    </a>
+                    <a href="{{ route('admin.sales') }}"
+                       class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap {{ request()->routeIs('admin.sales*') ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        Sales
+                    </a>
+                    <a href="{{ route('admin.orders') }}"
+                       class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap {{ request()->routeIs('admin.orders*') ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                        Orders
+                    </a>
+                </nav>
+            </div>
+        </div>
+
         <!-- Main Content -->
         <div class="py-8">
             {{ $slot }}

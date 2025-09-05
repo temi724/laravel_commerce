@@ -23,6 +23,7 @@ return new class extends Migration
             $table->json('what_is_included')->nullable(); // Array of included items
             $table->json('specification')->nullable(); // JSON object with nested structure
             $table->boolean('in_stock')->default(true);
+            $table->enum('product_status', ['new', 'uk_used', 'refurbished'])->default('new');
             $table->timestamps();
         });
     }

@@ -61,36 +61,44 @@ class CartPage extends Component
             // Handle both old format (integer) and new format (array)
             $quantity = is_array($item) ? ($item['quantity'] ?? 1) : $item;
             $type = is_array($item) ? ($item['type'] ?? 'product') : 'product';
+            $selectedStorage = is_array($item) ? ($item['selected_storage'] ?? null) : null;
+            $storagePrice = is_array($item) ? ($item['storage_price'] ?? null) : null;
 
             if ($type === 'deal') {
                 $deal = Deal::find($itemId);
                 if ($deal) {
+                    $itemPrice = $storagePrice ?? $deal->price;
                     $this->cartItems[] = [
                         'id' => $deal->id,
                         'type' => 'deal',
                         'name' => $deal->product_name,
-                        'price' => $deal->price,
+                        'price' => $itemPrice,
                         'old_price' => $deal->old_price,
                         'quantity' => $quantity,
                         'image' => $deal->images_url && count($deal->images_url) > 0 ? $deal->images_url[0] : null,
-                        'subtotal' => $deal->price * $quantity
+                        'subtotal' => $itemPrice * $quantity,
+                        'selected_storage' => $selectedStorage,
+                        'storage_price' => $storagePrice
                     ];
-                    $this->cartTotal += $deal->price * $quantity;
+                    $this->cartTotal += $itemPrice * $quantity;
                     $this->cartCount += $quantity;
                 }
             } else {
                 $product = Product::find($itemId);
                 if ($product) {
+                    $itemPrice = $storagePrice ?? $product->display_price;
                     $this->cartItems[] = [
                         'id' => $product->id,
                         'type' => 'product',
                         'name' => $product->product_name,
-                        'price' => $product->price,
+                        'price' => $itemPrice,
                         'quantity' => $quantity,
                         'image' => $product->images_url && count($product->images_url) > 0 ? $product->images_url[0] : null,
-                        'subtotal' => $product->price * $quantity
+                        'subtotal' => $itemPrice * $quantity,
+                        'selected_storage' => $selectedStorage,
+                        'storage_price' => $storagePrice
                     ];
-                    $this->cartTotal += $product->price * $quantity;
+                    $this->cartTotal += $itemPrice * $quantity;
                     $this->cartCount += $quantity;
                 }
             }

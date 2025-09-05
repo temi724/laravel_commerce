@@ -41,38 +41,94 @@ class CheckoutPage extends Component
         foreach ($cart as $itemId => $item) {
             $quantity = is_array($item) ? ($item['quantity'] ?? 1) : $item;
             $type = is_array($item) ? ($item['type'] ?? 'product') : 'product';
+            $selectedStorage = is_array($item) ? ($item['selected_storage'] ?? null) : null;
+            $storagePrice = is_array($item) ? ($item['storage_price'] ?? null) : null;
+            $selectedColor = is_array($item) ? ($item['selected_color'] ?? null) : null;
 
             if ($type === 'deal') {
                 $deal = Deal::find($itemId);
                 if ($deal) {
+                    $itemPrice = $storagePrice ?? $deal->price;
                     $this->cartItems[] = [
                         'id' => $deal->id,
                         'type' => 'deal',
                         'name' => $deal->product_name,
-                        'price' => $deal->price,
+                        'price' => $itemPrice,
                         'quantity' => $quantity,
                         'image' => $deal->images_url && count($deal->images_url) > 0 ? $deal->images_url[0] : null,
-                        'subtotal' => $deal->price * $quantity
+                        'subtotal' => $itemPrice * $quantity,
+                        'selected_storage' => $selectedStorage,
+                        'storage_price' => $storagePrice,
+                        'selected_color' => $selectedColor
                     ];
-                    $this->cartTotal += $deal->price * $quantity;
+                    $this->cartTotal += $itemPrice * $quantity;
                     $this->cartCount += $quantity;
                 }
             } else {
                 $product = Product::find($itemId);
                 if ($product) {
+                    $itemPrice = $storagePrice ?? $product->display_price;
+
                     $this->cartItems[] = [
                         'id' => $product->id,
                         'type' => 'product',
                         'name' => $product->product_name,
-                        'price' => $product->price,
+                        'price' => $itemPrice,
                         'quantity' => $quantity,
                         'image' => $product->images_url && count($product->images_url) > 0 ? $product->images_url[0] : null,
-                        'subtotal' => $product->price * $quantity
+                        'subtotal' => $itemPrice * $quantity,
+                        'selected_storage' => $selectedStorage,
+                        'storage_price' => $storagePrice,
+                        'selected_color' => $selectedColor
                     ];
-                    $this->cartTotal += $product->price * $quantity;
+                    $this->cartTotal += $itemPrice * $quantity;
                     $this->cartCount += $quantity;
                 }
             }
+        }
+    }
+
+    public function generateOrderId()
+    {
+        // Use the same format as Sales model
+        do {
+            $orderId = 'ORD-' . date('Ymd') . '-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
+        } while (Sales::where('order_id', $orderId)->exists());
+
+        $this->generatedOrderId = $orderId;
+    }
+
+    public function updateItemStorage($itemIndex, $storageOption, $storagePrice)
+    {
+        if (isset($this->cartItems[$itemIndex])) {
+            $itemId = $this->cartItems[$itemIndex]['id'];
+            $cart = session()->get('cart', []);
+
+            // Update the selected storage and price in session
+            if (isset($cart[$itemId])) {
+                $cart[$itemId]['selected_storage'] = $storageOption;
+                $cart[$itemId]['storage_price'] = $storagePrice;
+                session(['cart' => $cart]);
+
+                // Update the current cart items display
+                $this->cartItems[$itemIndex]['selected_storage'] = $storageOption;
+                $this->cartItems[$itemIndex]['storage_price'] = $storagePrice;
+                $this->cartItems[$itemIndex]['price'] = $storagePrice;
+                $this->cartItems[$itemIndex]['subtotal'] = $storagePrice * $this->cartItems[$itemIndex]['quantity'];
+
+                // Recalculate cart total
+                $this->recalculateCartTotal();
+
+                session()->flash('message', 'Storage option updated successfully!');
+            }
+        }
+    }
+
+    private function recalculateCartTotal()
+    {
+        $this->cartTotal = 0;
+        foreach ($this->cartItems as $item) {
+            $this->cartTotal += $item['subtotal'];
         }
     }
 
@@ -152,16 +208,6 @@ class CheckoutPage extends Component
         $this->showBankModal = true;
     }
 
-    public function generateOrderId()
-    {
-        // Use the same format as Sales model
-        do {
-            $orderId = 'ORD-' . date('Ymd') . '-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
-        } while (Sales::where('order_id', $orderId)->exists());
-
-        $this->generatedOrderId = $orderId;
-    }
-
     public function confirmPayment()
     {
         $this->createSale();
@@ -185,13 +231,37 @@ class CheckoutPage extends Component
     public function createSale()
     {
         try {
-            // Collect product IDs from cart items
+            // Collect product details from cart items
             $productIds = [];
             $totalQuantity = 0;
+            $orderDetails = [];
 
             foreach ($this->cartItems as $item) {
                 $productIds[] = $item['id'];
                 $totalQuantity += $item['quantity'];
+
+                // Build detailed order information including storage selection
+                $itemDetails = [
+                    'id' => $item['id'],
+                    'type' => $item['type'],
+                    'name' => $item['name'],
+                    'price' => $item['price'],
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $item['subtotal']
+                ];
+
+                // Add storage and color selections if available
+                if (!empty($item['selected_storage'])) {
+                    $itemDetails['selected_storage'] = $item['selected_storage'];
+                }
+                if (!empty($item['storage_price'])) {
+                    $itemDetails['storage_price'] = $item['storage_price'];
+                }
+                if (!empty($item['selected_color'])) {
+                    $itemDetails['selected_color'] = $item['selected_color'];
+                }
+
+                $orderDetails[] = $itemDetails;
             }
 
             // Create sale record
@@ -206,7 +276,8 @@ class CheckoutPage extends Component
                 'quantity' => $totalQuantity,
                 'order_status' => false, // Not completed yet
                 'order_type' => $this->deliveryOption,
-                'payment_status' => Sales::PAYMENT_PENDING
+                'payment_status' => Sales::PAYMENT_PENDING,
+                'order_details' => $orderDetails // Store detailed order information including storage selections
             ]);
 
             Log::info('Sale created successfully', [
@@ -214,7 +285,8 @@ class CheckoutPage extends Component
                 'order_id' => $sale->order_id,
                 'username' => $sale->username,
                 'total_amount' => $this->cartTotal,
-                'product_count' => count($productIds)
+                'product_count' => count($productIds),
+                'order_details' => $orderDetails
             ]);
 
             return $sale;

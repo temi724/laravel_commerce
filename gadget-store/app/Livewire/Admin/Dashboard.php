@@ -21,6 +21,9 @@ class Dashboard extends Component
     public $totalRevenue = 0;
     public $pendingOrders = 0;
     public $completedOrders = 0;
+    public $completedPayments = 0;
+    public $pendingPayments = 0;
+    public $failedRefundedPayments = 0;
 
     public function mount()
     {
@@ -35,12 +38,23 @@ class Dashboard extends Component
         $this->pendingOrders = Sales::where('order_status', false)->count();
         $this->completedOrders = Sales::where('order_status', true)->count();
 
-        // Calculate revenue from products in sales
-        $sales = Sales::all();
+        // Payment status counts
+        $this->completedPayments = Sales::where('payment_status', 'completed')->count();
+        $this->pendingPayments = Sales::where('payment_status', 'pending')->count();
+        $this->failedRefundedPayments = Sales::whereIn('payment_status', ['failed', 'refunded'])->count();
+
+        // Calculate revenue from order_details in sales where payment is completed
+        $completedSales = Sales::where('payment_status', 'completed')->get();
         $this->totalRevenue = 0;
 
-        foreach ($sales as $sale) {
-            if ($sale->product_ids && is_array($sale->product_ids)) {
+        foreach ($completedSales as $sale) {
+            if ($sale->order_details && is_array($sale->order_details)) {
+                foreach ($sale->order_details as $item) {
+                    $this->totalRevenue += $item['subtotal'] ?? 0;
+                }
+            }
+            // Fallback for older records without order_details
+            elseif ($sale->product_ids && is_array($sale->product_ids)) {
                 foreach ($sale->product_ids as $productId) {
                     $product = Product::find($productId);
                     if ($product) {

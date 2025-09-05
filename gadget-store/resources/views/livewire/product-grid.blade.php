@@ -198,7 +198,10 @@
                     <!-- Price -->
                     <div class="flex items-center justify-between">
                         <div class="text-lg font-bold text-gray-900">
-                            ₦{{ number_format($product['price'], 2) }}
+                            ₦{{ number_format($product['display_price'], 2) }}
+                            @if(!empty($product['default_storage']))
+                                <span class="text-xs text-gray-500 block">{{ $product['default_storage'] }}</span>
+                            @endif
                         </div>
 
                         @if($product['in_stock'])

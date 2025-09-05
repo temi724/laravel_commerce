@@ -1,332 +1,14 @@
-{{-- <div class="space-y-6">
-    <!-- Header with Search and Filters -->
+<div class="max-w-7xl mx-auto px-4 space-y-6">
+    <!-- Page Header -->
     <div class="bg-white rounded-lg shadow-sm p-6">
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            <div class="flex flex-col sm:flex-row gap-4 flex-1">
-                <!-- Search -->
-                <div class="flex-1">
-                    <input type="text" wire:model.live="search"
-                           placeholder="Search by customer name, email, or order ID..."
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-              <!-- Compact Confirmation Modal -->
-    @if($showConfirmModal)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">   </div>
-            </div>
-        </div>
-
-        <!-- Filters Row -->
-        <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <!-- Order Status Filter -->
-            <select wire:model.live="statusFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="all">All Order Status</option>
-                <option value="pending">Pending Orders</option>
-                <option value="completed">Completed Orders</option>
-            </select>
-
-            <!-- Payment Status Filter -->
-            <select wire:model.live="paymentFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="all">All Payment Status</option>
-                <option value="pending">Payment Pending</option>
-                <option value="completed">Payment Completed</option>
-                <option value="failed">Payment Failed</option>
-                <option value="refunded">Refunded</option>
-            </select>
-
-            <!-- Order Type Filter -->
-            <select wire:model.live="orderTypeFilter"
-                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="all">All Order Types</option>
-                <option value="pickup">Pickup Orders</option>
-                <option value="delivery">Delivery Orders</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Flash Messages -->
-    @if (session()->has('message'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <span class="block sm:inline">{{ session('message') }}</span>
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span class="block sm:inline">{{ session('error') }}</span>
-        </div>
-    @endif
-
-    <!-- Sales Table -->
-    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Order ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Customer</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Items</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Order Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Order Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Payment Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Total</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Completion Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Approved By</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Actions</th>
-                    </tr>
-                </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($sales as $sale)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">#{{ $sale->order_id }}</div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="space-y-1">
-                                <div class="text-sm font-medium text-gray-900">{{ $sale->username }}</div>
-                                <div class="text-sm text-gray-500">{{ $sale->emailaddress }}</div>
-                                <div class="text-xs text-gray-400">{{ $sale->phonenumber }}</div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ $sale->quantity }} items</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full {{ $sale->order_type === 'delivery' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
-                                {{ ucfirst($sale->order_type) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full {{ $sale->order_status ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                {{ $sale->order_status ? 'Completed' : 'Pending' }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full
-                                @if($sale->payment_status === 'completed') bg-green-100 text-green-800
-                                @elseif($sale->payment_status === 'pending') bg-yellow-100 text-yellow-800
-                                @elseif($sale->payment_status === 'failed') bg-red-100 text-red-800
-                                @else bg-gray-100 text-gray-800 @endif">
-                                {{ ucfirst($sale->payment_status) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-semibold text-gray-900">₦{{ number_format($this->calculateOrderTotal($sale->product_ids), 2) }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            @if($sale->completed_at)
-                                <div class="text-sm text-gray-900">{{ $sale->completed_at->format('M j, Y') }}</div>
-                                <div class="text-xs text-gray-500">{{ $sale->completed_at->format('g:i A') }}</div>
-                            @else
-                                <div class="text-sm text-gray-400">Not completed</div>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            @if($sale->approved_by_admin)
-                                <div class="text-sm text-gray-900">{{ $sale->approved_by_admin }}</div>
-                                @if($sale->payment_approved_at)
-                                    <div class="text-xs text-gray-500">{{ $sale->payment_approved_at->format('M j, g:i A') }}</div>
-                                @endif
-                            @else
-                                <div class="text-sm text-gray-400">Not approved</div>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ $sale->created_at->format('M j, Y') }}</div>
-                            <div class="text-xs text-gray-500">{{ $sale->created_at->format('g:i A') }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex space-x-2">
-                                <button wire:click="toggleExpanded('{{ $sale->id }}')"
-                                        class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <svg class="w-4 h-4 mr-1 transition-transform duration-200 {{ in_array($sale->id, $this->getExpandedRowsArray()) ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                    {{ in_array($sale->id, $this->getExpandedRowsArray()) ? 'Hide' : 'View' }}
-                                </button>
-                                @if(!$sale->order_status)
-                                    @if($sale->payment_status === 'completed')
-                                        <button wire:click="updateOrderStatus('{{ $sale->id }}', true)"
-                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                            Complete
-                                        </button>
-                                    @else
-                                        <button disabled
-                                                title="Payment must be completed first"
-                                                class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed opacity-50">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                            Complete
-                                        </button>
-                                    @endif
-                                @endif
-                                @if($sale->payment_status === 'pending')
-                                    <button wire:click="confirmPaymentStatusUpdate('{{ $sale->id }}')"
-                                            class="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-red-600 bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                                        </svg>
-                                        Mark Paid
-                                    </button>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Expandable Row -->
-                    @if(in_array($sale->id, $this->getExpandedRowsArray()))
-                    <tr class="bg-gray-50">
-                        <td colspan="11" class="px-6 py-4">
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <!-- Customer Information -->
-                                <div>
-                                    <h4 class="text-lg font-medium text-gray-900 mb-4">Customer Information</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Name:</span>
-                                            <span class="font-medium">{{ $sale->username }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Email:</span>
-                                            <span class="font-medium">{{ $sale->emailaddress }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Phone:</span>
-                                            <span class="font-medium">{{ $sale->phonenumber }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Location:</span>
-                                            <span class="font-medium">{{ $sale->location ?? 'N/A' }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Order Information -->
-                                <div>
-                                    <h4 class="text-lg font-medium text-gray-900 mb-4">Order Information</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Quantity:</span>
-                                            <span class="font-medium">{{ $sale->quantity }} items</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Type:</span>
-                                            <span class="font-medium">{{ ucfirst($sale->order_type) }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Status:</span>
-                                            <span class="inline-flex px-2 py-1 text-xs rounded-full {{ $sale->order_status ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                                {{ $sale->order_status ? 'Completed' : 'Pending' }}
-                                            </span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Payment Status:</span>
-                                            <span class="inline-flex px-2 py-1 text-xs rounded-full
-                                                @if($sale->payment_status === 'completed') bg-green-100 text-green-800
-                                                @elseif($sale->payment_status === 'pending') bg-yellow-100 text-yellow-800
-                                                @elseif($sale->payment_status === 'failed') bg-red-100 text-red-800
-                                                @else bg-gray-100 text-gray-800 @endif">
-                                                {{ ucfirst($sale->payment_status) }}
-                                            </span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Total:</span>
-                                            <span class="font-bold text-lg">₦{{ number_format($this->calculateOrderTotal($sale->product_ids), 2) }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Date:</span>
-                                            <span class="font-medium">{{ $sale->created_at->format('M j, Y g:i A') }}</span>
-                                        </div>
-                                        @if($sale->completed_at)
-                                            <div class="flex justify-between">
-                                                <span class="text-gray-600">Completed At:</span>
-                                                <span class="font-medium text-green-600">{{ $sale->completed_at->format('M j, Y g:i A') }}</span>
-                                            </div>
-                                        @endif
-                                        @if($sale->approved_by_admin)
-                                            <div class="flex justify-between">
-                                                <span class="text-gray-600">Approved By:</span>
-                                                <span class="font-medium text-blue-600">{{ $sale->approved_by_admin }}</span>
-                                            </div>
-                                        @endif
-                                        @if($sale->payment_approved_at)
-                                            <div class="flex justify-between">
-                                                <span class="text-gray-600">Payment Approved:</span>
-                                                <span class="font-medium text-green-600">{{ $sale->payment_approved_at->format('M j, Y g:i A') }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Products -->
-                            <div class="mt-6">
-                                <h4 class="text-lg font-medium text-gray-900 mb-4">Products Ordered</h4>
-                                <div class="space-y-2">
-                                    @if($sale->product_ids && is_array($sale->product_ids))
-                                        @foreach($sale->product_ids as $productId)
-                                            @php
-                                                $product = \App\Models\Product::find($productId) ?? \App\Models\Deal::find($productId);
-                                            @endphp
-                                            @if($product)
-                                                <div class="flex items-center justify-between p-3 bg-white rounded-lg border">
-                                                    @if($product->images_url && count($product->images_url) > 0)
-                                                        <img src="{{ $product->images_url[0] }}" alt="{{ $product->product_name }}" class="w-12 h-12 rounded-lg object-cover mr-3">
-                                                    @endif
-                                                    <span class="font-medium flex-1">{{ $product->product_name ?? $product->name }}</span>
-                                                    <span class="font-bold">₦{{ number_format($product->price, 2) }}</span>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    @else
-                                        <p class="text-gray-500">No products information available</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    @endif
-                @empty
-                    <tr>
-                        <td colspan="11" class="px-6 py-12 text-center text-gray-500">
-                            <div class="flex flex-col items-center">
-                                <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
-                                <p class="text-gray-500">Orders will appear here once customers start making purchases.</p>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-        </div>
-    </div>
-
-    <!-- Pagination -->
-    @if($sales->hasPages())
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
-            {{ $sales->links() }}
-        </div>
-    @endif
-
-    <!-- Debug Info (remove after testing) -->
-    <div class="bg-yellow-100 p-2 text-xs">
-        <div class="flex justify-between items-center mb-2">
-            <span>Debug: expandedRows = {{ count($this->getExpandedRowsArray()) }} rows expanded</span>
-            <div class="space-x-2">
-                <button wire:click="resetModalState" class="bg-purple-500 text-white px-2 py-1 rounded text-xs">Reset State</button>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Sales Management</h1>
+                <p class="mt-1 text-sm text-gray-600">View and manage customer orders and sales data</p>
             </div>
         </div>
     </div>
-</div> --}}
-<div class="space-y-6">
+
     <!-- Header with Search and Filters -->
     <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -448,7 +130,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-semibold text-gray-900">₦{{ number_format($this->calculateOrderTotal($sale->product_ids), 2) }}</div>
+                                <div class="text-sm font-semibold text-gray-900">₦{{ number_format($this->getOrderTotal($sale), 2) }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($sale->completed_at)
@@ -572,7 +254,7 @@
                                             </div>
                                             <div class="flex justify-between">
                                                 <span class="text-gray-600">Total:</span>
-                                                <span class="font-bold text-lg">₦{{ number_format($this->calculateOrderTotal($sale->product_ids), 2) }}</span>
+                                                <span class="font-bold text-lg">₦{{ number_format($this->getOrderTotal($sale), 2) }}</span>
                                             </div>
                                             <div class="flex justify-between">
                                                 <span class="text-gray-600">Date:</span>
@@ -603,14 +285,45 @@
                                 <!-- Products -->
                                 <div class="mt-6">
                                     <h4 class="text-lg font-medium text-gray-900 mb-4">Products Ordered</h4>
-                                    <div class="space-y-2">
-                                        @if($sale->product_ids && is_array($sale->product_ids))
+                                    <div class="space-y-4">
+                                        @if($sale->order_details && is_array($sale->order_details))
+                                            @foreach($sale->order_details as $item)
+                                                <div class="flex items-start justify-between p-4 bg-white rounded-lg border border-gray-200">
+                                                    <div class="flex items-start space-x-4 flex-1">
+                                                        @if(isset($item['image']) && $item['image'])
+                                                            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}" class="w-16 h-16 rounded-lg object-cover">
+                                                        @endif
+                                                        <div class="flex-1">
+                                                            <h5 class="font-medium text-gray-900">{{ $item['name'] ?? 'Unknown Product' }}</h5>
+                                                            <div class="mt-1 text-sm text-gray-600 space-y-1">
+                                                                @if(isset($item['selected_storage']))
+                                                                    <div>Storage: {{ $item['selected_storage'] }}</div>
+                                                                @endif
+                                                                @if(isset($item['selected_color']))
+                                                                    <div>Color: {{ $item['selected_color'] }}</div>
+                                                                @endif
+                                                                <div>Quantity: {{ $item['quantity'] ?? 1 }}</div>
+                                                                <div>Price: ₦{{ number_format($item['price'] ?? 0, 2) }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <div class="font-bold text-lg">₦{{ number_format($item['subtotal'] ?? 0, 2) }}</div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200 mt-4">
+                                                <span class="font-semibold text-gray-900">Order Total:</span>
+                                                <span class="font-bold text-xl text-blue-600">₦{{ number_format($this->getOrderTotal($sale), 2) }}</span>
+                                            </div>
+                                        @elseif($sale->product_ids && is_array($sale->product_ids))
+                                            <!-- Fallback to product_ids if order_details is not available -->
                                             @foreach($sale->product_ids as $productId)
                                                 @php
                                                     $product = \App\Models\Product::find($productId) ?? \App\Models\Deal::find($productId);
                                                 @endphp
                                                 @if($product)
-                                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg ">
+                                                    <div class="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
                                                         @if($product->images_url && count($product->images_url) > 0)
                                                             <img src="{{ $product->images_url[0] }}" alt="{{ $product->product_name }}" class="w-12 h-12 rounded-lg object-cover mr-3">
                                                         @endif

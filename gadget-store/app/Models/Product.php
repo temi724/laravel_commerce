@@ -78,7 +78,9 @@ class Product extends Model
         'colors',
         'what_is_included',
         'specification',
+        'storage_options',
         'in_stock',
+        'product_status',
     ];
 
       protected $casts = [
@@ -87,9 +89,12 @@ class Product extends Model
         'colors' => 'array',
         'what_is_included' => 'array',
         'specification' => 'array',
+        'storage_options' => 'array',
         'price' => 'decimal:2',
         'in_stock' => 'boolean',
     ];
+
+    protected $appends = ['storage_options', 'display_price', 'default_storage'];
 
     // Generate MongoDB-like ObjectId
     protected static function boot()
@@ -116,6 +121,68 @@ class Product extends Model
     // {
     //     return $this->specification['basefeature']['storage'] ?? [];
     // }
+
+    // Get storage options with pricing
+    public function getStorageOptionsAttribute()
+    {
+        // If storage options are explicitly set in the database, use them
+        if (isset($this->attributes['storage_options']) && $this->attributes['storage_options']) {
+            $storedOptions = json_decode($this->attributes['storage_options'], true);
+            if (is_array($storedOptions) && !empty($storedOptions)) {
+                return $storedOptions;
+            }
+        }
+
+        // Fallback to category-based defaults for backward compatibility
+        $categoryName = $this->category ? $this->category->name : '';
+        $basePrice = $this->price;
+
+        // Define storage options with prices based on product category
+        if (stripos($categoryName, 'phone') !== false || stripos($categoryName, 'smartphone') !== false) {
+            return [
+                ['storage' => '128GB', 'price' => $basePrice],
+                ['storage' => '256GB', 'price' => $basePrice + 50000], // +50k for 256GB
+                ['storage' => '512GB', 'price' => $basePrice + 120000], // +120k for 512GB
+                ['storage' => '1TB', 'price' => $basePrice + 250000], // +250k for 1TB
+            ];
+        } elseif (stripos($categoryName, 'laptop') !== false || stripos($categoryName, 'computer') !== false) {
+            return [
+                ['storage' => '256GB SSD', 'price' => $basePrice],
+                ['storage' => '512GB SSD', 'price' => $basePrice + 80000], // +80k for 512GB
+                ['storage' => '1TB SSD', 'price' => $basePrice + 180000], // +180k for 1TB
+                ['storage' => '2TB SSD', 'price' => $basePrice + 350000], // +350k for 2TB
+            ];
+        } elseif (stripos($categoryName, 'tablet') !== false) {
+            return [
+                ['storage' => '64GB', 'price' => $basePrice],
+                ['storage' => '128GB', 'price' => $basePrice + 30000], // +30k for 128GB
+                ['storage' => '256GB', 'price' => $basePrice + 70000], // +70k for 256GB
+                ['storage' => '512GB', 'price' => $basePrice + 140000], // +140k for 512GB
+            ];
+        }
+
+        return [];
+    }
+
+    // Get display price (first storage option price if storage exists, otherwise base price)
+    public function getDisplayPriceAttribute()
+    {
+        $storageOptions = $this->storage_options;
+        if (!empty($storageOptions)) {
+            return $storageOptions[0]['price'];
+        }
+        return $this->price;
+    }
+
+    // Get default storage (first storage option)
+    public function getDefaultStorageAttribute()
+    {
+        $storageOptions = $this->storage_options;
+        if (!empty($storageOptions)) {
+            return $storageOptions[0]['storage'];
+        }
+        return null;
+    }
 
     // // Accessor to check if product has dual SIM
     // public function getHasDualSimAttribute()

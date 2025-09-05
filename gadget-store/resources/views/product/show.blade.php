@@ -130,18 +130,18 @@
                 <!-- Pricing Section -->
                 <div class="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-6">
                     <div class="flex items-baseline space-x-3">
-                        <span class="text-3xl font-bold text-red-600">₦{{ number_format($product->price, 2) }}</span>
+                        <span id="current-price" class="text-3xl font-bold text-red-600">₦{{ number_format($product->display_price, 2) }}</span>
                         @if($type === 'deal' && $product->old_price && $product->old_price > $product->price)
                             <span class="text-lg text-gray-500 line-through">₦{{ number_format($product->old_price, 2) }}</span>
                             <span class="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">SAVE ₦{{ number_format($product->old_price - $product->price, 2) }}</span>
-                        @elseif($type === 'product' && $product->price > 500)
-                            <span class="text-lg text-gray-500 line-through">₦{{ number_format($product->price * 1.2, 2) }}</span>
-                            <span class="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">SAVE ₦{{ number_format($product->price * 0.2, 2) }}</span>
+                        @elseif($type === 'product' && $product->display_price > 500)
+                            <span id="old-price" class="text-lg text-gray-500 line-through">₦{{ number_format($product->display_price * 1.2, 2) }}</span>
+                            <span id="savings" class="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">SAVE ₦{{ number_format($product->display_price * 0.2, 2) }}</span>
                         @endif
                     </div>
                     @if($type === 'deal')
                         <p class="text-sm text-gray-600 mt-1">⚡ Flash Deal - Limited time offer!</p>
-                    @elseif($product->price > 500)
+                    @elseif($product->display_price > 500)
                         <p class="text-sm text-gray-600 mt-1">Sale ends: September 11, 2025</p>
                     @endif
                 </div>
@@ -185,16 +185,41 @@
                 @endif
 
                 <!-- Storage Options -->
-                @if(stripos($product->product_name, 'iPhone') !== false || stripos($product->product_name, 'Galaxy') !== false)
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Storage: 128 GB</h3>
+                @if(!empty($product->storage_options))
+                    <div x-data="{
+                        selectedStorage: '{{ $product->default_storage }}',
+                        selectedPrice: {{ $product->display_price }},
+                        storageOptions: @js($product->storage_options),
+                        updatePrice(storage, price) {
+                            this.selectedStorage = storage;
+                            this.selectedPrice = price;
+                            document.getElementById('current-price').textContent = '₦' + price.toLocaleString('en-NG', {minimumFractionDigits: 2});
+                            const oldPriceElement = document.getElementById('old-price');
+                            const savingsElement = document.getElementById('savings');
+                            if (oldPriceElement) {
+                                oldPriceElement.textContent = '₦' + (price * 1.2).toLocaleString('en-NG', {minimumFractionDigits: 2});
+                            }
+                            if (savingsElement) {
+                                savingsElement.textContent = 'SAVE ₦' + (price * 0.2).toLocaleString('en-NG', {minimumFractionDigits: 2});
+                            }
+                        }
+                    }">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Storage: <span x-text="selectedStorage"></span></h3>
                         <div class="flex flex-wrap gap-3">
-                            @foreach(['64 GB', '128 GB', '256 GB', '512 GB'] as $storage)
-                                <button class="{{ $storage === '128 GB' ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-gray-300 hover:border-gray-400' }} px-4 py-2 border-2 rounded-lg text-sm font-medium transition-all duration-200">
-                                    {{ $storage }}
+                            @foreach($product->storage_options as $storageOption)
+                                <button
+                                    @click="updatePrice('{{ $storageOption['storage'] }}', {{ $storageOption['price'] }})"
+                                    :class="selectedStorage === '{{ $storageOption['storage'] }}' ? 'border-blue-500 bg-blue-50 text-blue-700 ring-2 ring-blue-200' : 'border-gray-300 hover:border-gray-400'"
+                                    class="px-4 py-3 border-2 rounded-lg transition-all duration-200">
+                                    <div class="text-center">
+                                        <div class="text-sm font-medium">{{ $storageOption['storage'] }}</div>
+                                        <div class="text-xs text-green-600 mt-1">₦{{ number_format($storageOption['price'], 0) }}</div>
+                                    </div>
                                 </button>
                             @endforeach
                         </div>
+                        <input type="hidden" id="selected-storage" x-model="selectedStorage" />
+                        <input type="hidden" id="selected-storage-price" x-model="selectedPrice" />
                     </div>
                 @endif
 
@@ -214,7 +239,13 @@
                     <!-- Add to Cart Section -->
                     <div class="space-y-4 mb-6">
                             <div class="flex gap-3">
-                            <button                         onclick="window.Livewire && Livewire.dispatch('addToCart', ['{{ $product->id }}', 1, '{{ $type }}'])" class="flex-1 bg-blue-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
+                            <button onclick="
+                                const selectedStorage = document.getElementById('selected-storage')?.value || null;
+                                const selectedPrice = document.getElementById('selected-storage-price')?.value || {{ $product->display_price }};
+                                if (window.Livewire) {
+                                    Livewire.dispatch('addToCart', ['{{ $product->id }}', 1, '{{ $type }}', selectedStorage, selectedPrice]);
+                                }
+                            " class="flex-1 bg-blue-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
                                 <svg class="w-5 h-5 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.74157 18.5545C4.94119 20 7.17389 20 11.6393 20H12.3605C16.8259 20 19.0586 20 20.2582 18.5545M3.74157 18.5545C2.54194 17.1091 2.9534 14.9146 3.77633 10.5257C4.36155 7.40452 4.65416 5.84393 5.76506 4.92196M3.74157 18.5545L5.76506 4.92196M20.2582 18.5545C21.4578 17.1091 21.0464 14.9146 20.2235 10.5257C19.6382 7.40452 19.3456 5.84393 18.2347 4.92196M20.2582 18.5545L18.2347 4.92196M18.2347 4.92196C17.1238 4 15.5361 4 12.3605 4H11.6393C8.46374 4 6.87596 4 5.76506 4.92196" stroke="currentColor" stroke-width="1.5"/>
                                     <circle cx="9" cy="19.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>

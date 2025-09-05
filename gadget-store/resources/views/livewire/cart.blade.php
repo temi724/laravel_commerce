@@ -40,6 +40,13 @@
                                     <!-- Product Details -->
                                     <div class="flex-1">
                                         <h3 class="text-sm font-medium text-gray-900 line-clamp-2">{{ $item['name'] }}</h3>
+
+                                        <!-- Storage Selection Display -->
+                                        @if(isset($item['selected_storage']))
+                                            <p class="text-xs text-blue-600 mt-1">{{ $item['selected_storage'] }}</p>
+                                        @endif
+
+                                        <!-- Price Display -->
                                         @if(isset($item['old_price']) && $item['old_price'] > $item['price'])
                                             <div class="flex items-center space-x-2">
                                                 <p class="text-sm font-semibold text-gray-900">₦{{ number_format($item['price'], 2) }}</p>

@@ -83,5 +83,8 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/', App\Livewire\Admin\Dashboard::class)->name('admin.dashboard');
     Route::get('/dashboard', App\Livewire\Admin\Dashboard::class)->name('admin.dashboard.home');
     Route::get('/products', App\Livewire\Admin\ProductManager::class)->name('admin.products');
+    Route::get('/products/create', App\Livewire\Admin\CreateProduct::class)->name('admin.products.create');
+    Route::get('/products/{product}/edit', App\Livewire\Admin\EditProduct::class)->name('admin.products.edit');
     Route::get('/sales', App\Livewire\Admin\SalesManager::class)->name('admin.sales');
+    Route::get('/orders', App\Livewire\Admin\OrderManager::class)->name('admin.orders');
 });

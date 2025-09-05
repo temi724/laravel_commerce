@@ -28,11 +28,13 @@ class Sales extends Model
         'payment_status',
         'completed_at',
         'approved_by_admin',
-        'payment_approved_at'
+        'payment_approved_at',
+        'order_details'
     ];
 
     protected $casts = [
         'product_ids' => 'array',
+        'order_details' => 'array',
         'order_status' => 'boolean',
         'quantity' => 'integer',
         'payment_status' => 'string',
@@ -179,5 +181,19 @@ class Sales extends Model
     {
         return $this->payment_approved_at ? $this->payment_approved_at->format('M d, Y h:i A') : null;
     }
+
+    public function getTotalFromOrderDetails()
+{
+    if (empty($this->order_details)) {
+        return 0;
+    }
+
+    $total = 0;
+    foreach ($this->order_details as $item) {
+        $total += $item['subtotal'] ?? 0;
+    }
+
+    return $total;
+}
 
 }

@@ -19,6 +19,12 @@
                         <p class="text-sm text-gray-500 mt-1">
                             {{ $item['type'] === 'deal' ? 'Flash Deal' : 'Product' }}
                         </p>
+
+                        <!-- Storage Selection Display -->
+                        @if(isset($item['selected_storage']))
+                            <p class="text-sm text-blue-600 mt-1 font-medium">{{ $item['selected_storage'] }}</p>
+                        @endif
+
                         @if(isset($item['old_price']) && $item['old_price'] > $item['price'])
                             <div class="flex items-center space-x-2 mt-2">
                                 <p class="text-lg font-semibold text-gray-900">₦{{ number_format($item['price'], 2) }}</p>
