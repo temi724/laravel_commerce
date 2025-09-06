@@ -38,12 +38,6 @@
                     Add New Product/Deal
                 </button>
             </div>
-
-            <!-- Test Livewire Button -->
-            <button wire:click="testLivewire"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors ml-2">
-                Test Livewire
-            </button>
         </div>
     </div>
 

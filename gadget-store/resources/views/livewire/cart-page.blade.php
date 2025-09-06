@@ -1,83 +1,166 @@
 <div>
     @if(count($cartItems) > 0)
         <!-- Cart Items -->
-        <div class="space-y-6">
+        <div class="space-y-4 sm:space-y-6">
             @foreach($cartItems as $index => $item)
-                <div class="flex items-center space-x-4 py-6 border-b border-gray-200">
-                    <!-- Product Image -->
-                    <div class="flex-shrink-0">
-                        <img src="{{ $item['image'] ?? 'https://via.placeholder.com/96' }}"
-                             alt="{{ $item['name'] }}"
-                             class="h-20 w-24 rounded-lg object-cover">
-                    </div>
-
-                    <!-- Product Details -->
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-medium text-gray-900 truncate">
-                            {{ $item['name'] }}
-                        </h3>
-                        <p class="text-sm text-gray-500 mt-1">
-                            {{ $item['type'] === 'deal' ? 'Flash Deal' : 'Product' }}
-                        </p>
-
-                        <!-- Storage Selection Display -->
-                        @if(isset($item['selected_storage']))
-                            <p class="text-sm text-blue-600 mt-1 font-medium">{{ $item['selected_storage'] }}</p>
-                        @endif
-
-                        @if(isset($item['old_price']) && $item['old_price'] > $item['price'])
-                            <div class="flex items-center space-x-2 mt-2">
-                                <p class="text-lg font-semibold text-gray-900">₦{{ number_format($item['price'], 2) }}</p>
-                                <p class="text-sm text-gray-500 line-through">₦{{ number_format($item['old_price'], 2) }}</p>
+                <div class="bg-white rounded-lg p-4 sm:p-0 sm:bg-transparent">
+                    <!-- Mobile Layout: Stacked -->
+                    <div class="block sm:hidden space-y-3">
+                        <!-- Product Image and Info -->
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ $item['image'] ?? 'https://via.placeholder.com/96' }}"
+                                     alt="{{ $item['name'] }}"
+                                     class="h-16 w-20 rounded-lg object-cover">
                             </div>
-                        @else
-                            <p class="text-lg font-semibold text-gray-900 mt-2">
-                                ₦{{ number_format($item['price'], 2) }}
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-medium text-gray-900 line-clamp-2">
+                                    {{ $item['name'] }}
+                                </h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    {{ $item['type'] === 'deal' ? 'Flash Deal' : 'Product' }}
+                                </p>
+                                @if(isset($item['selected_storage']))
+                                    <p class="text-xs text-blue-600 mt-1 font-medium">{{ $item['selected_storage'] }}</p>
+                                @endif
+                            </div>
+                            <!-- Remove Button -->
+                            <button wire:click="removeFromCart('{{ $item['id'] }}')"
+                                    wire:confirm="Are you sure you want to remove this item from your cart?"
+                                    class="text-red-500 hover:text-red-700 transition-colors p-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Price and Controls Row -->
+                        <div class="flex items-center justify-between">
+                            <!-- Price -->
+                            <div>
+                                @if(isset($item['old_price']) && $item['old_price'] > $item['price'])
+                                    <div class="flex items-center space-x-2">
+                                        <p class="text-base font-semibold text-gray-900">₦{{ number_format($item['price'], 2) }}</p>
+                                        <p class="text-xs text-gray-500 line-through">₦{{ number_format($item['old_price'], 2) }}</p>
+                                    </div>
+                                @else
+                                    <p class="text-base font-semibold text-gray-900">
+                                        ₦{{ number_format($item['price'], 2) }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <!-- Quantity Controls -->
+                            <div class="flex items-center space-x-2">
+                                <button wire:click="decreaseQuantity('{{ $item['id'] }}')"
+                                        wire:loading.attr="disabled"
+                                        class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50"
+                                        @if($item['quantity'] <= 1) disabled @endif>
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                    </svg>
+                                </button>
+
+                                <span class="text-sm font-medium min-w-[1.5rem] text-center">
+                                    <span wire:loading wire:target="decreaseQuantity,increaseQuantity" class="text-gray-400">...</span>
+                                    <span wire:loading.remove wire:target="decreaseQuantity,increaseQuantity">{{ $item['quantity'] }}</span>
+                                </span>
+
+                                <button wire:click="increaseQuantity('{{ $item['id'] }}')"
+                                        wire:loading.attr="disabled"
+                                        class="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </button>
+
+                                <!-- Subtotal -->
+                                <div class="ml-4 text-right">
+                                    <p class="text-sm font-semibold text-gray-900">
+                                        ₦{{ number_format($item['subtotal'], 2) }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Layout: Row -->
+                    <div class="hidden sm:flex items-center space-x-4 py-6 border-b border-gray-200">
+                        <!-- Product Image -->
+                        <div class="flex-shrink-0">
+                            <img src="{{ $item['image'] ?? 'https://via.placeholder.com/96' }}"
+                                 alt="{{ $item['name'] }}"
+                                 class="h-20 w-24 rounded-lg object-cover">
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-lg font-medium text-gray-900 truncate">
+                                {{ $item['name'] }}
+                            </h3>
+                            <p class="text-sm text-gray-500 mt-1">
+                                {{ $item['type'] === 'deal' ? 'Flash Deal' : 'Product' }}
                             </p>
-                        @endif
-                    </div>
 
-                    <!-- Quantity Controls -->
-                    <div class="flex items-center space-x-3">
-                        <button wire:click="decreaseQuantity('{{ $item['id'] }}')"
-                                wire:loading.attr="disabled"
-                                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50"
-                                @if($item['quantity'] <= 1) disabled @endif>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                            </svg>
-                        </button>
+                            <!-- Storage Selection Display -->
+                            @if(isset($item['selected_storage']))
+                                <p class="text-sm text-blue-600 mt-1 font-medium">{{ $item['selected_storage'] }}</p>
+                            @endif
 
-                        <span class="text-lg font-medium min-w-[2rem] text-center">
-                            <span wire:loading wire:target="decreaseQuantity,increaseQuantity" class="text-gray-400">...</span>
-                            <span wire:loading.remove wire:target="decreaseQuantity,increaseQuantity">{{ $item['quantity'] }}</span>
-                        </span>
+                            @if(isset($item['old_price']) && $item['old_price'] > $item['price'])
+                                <div class="flex items-center space-x-2 mt-2">
+                                    <p class="text-lg font-semibold text-gray-900">₦{{ number_format($item['price'], 2) }}</p>
+                                    <p class="text-sm text-gray-500 line-through">₦{{ number_format($item['old_price'], 2) }}</p>
+                                </div>
+                            @else
+                                <p class="text-lg font-semibold text-gray-900 mt-2">
+                                    ₦{{ number_format($item['price'], 2) }}
+                                </p>
+                            @endif
+                        </div>
 
-                        <button wire:click="increaseQuantity('{{ $item['id'] }}')"
-                                wire:loading.attr="disabled"
-                                class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                        </button>
-                    </div>
+                        <!-- Quantity Controls -->
+                        <div class="flex items-center space-x-3">
+                            <button wire:click="decreaseQuantity('{{ $item['id'] }}')"
+                                    wire:loading.attr="disabled"
+                                    class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50"
+                                    @if($item['quantity'] <= 1) disabled @endif>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                </svg>
+                            </button>
 
-                    <!-- Subtotal -->
-                    <div class="text-right">
-                        <p class="text-lg font-semibold text-gray-900">
-                            ₦{{ number_format($item['subtotal'], 2) }}
-                        </p>
-                    </div>
+                            <span class="text-lg font-medium min-w-[2rem] text-center">
+                                <span wire:loading wire:target="decreaseQuantity,increaseQuantity" class="text-gray-400">...</span>
+                                <span wire:loading.remove wire:target="decreaseQuantity,increaseQuantity">{{ $item['quantity'] }}</span>
+                            </span>
 
-                    <!-- Remove Button -->
-                    <div>
-                        <button wire:click="removeFromCart('{{ $item['id'] }}')"
-                                wire:confirm="Are you sure you want to remove this item from your cart?"
-                                class="text-red-500 hover:text-red-700 transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
+                            <button wire:click="increaseQuantity('{{ $item['id'] }}')"
+                                    wire:loading.attr="disabled"
+                                    class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors disabled:opacity-50">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Subtotal -->
+                        <div class="text-right">
+                            <p class="text-lg font-semibold text-gray-900">
+                                ₦{{ number_format($item['subtotal'], 2) }}
+                            </p>
+                        </div>
+
+                        <!-- Remove Button -->
+                        <div>
+                            <button wire:click="removeFromCart('{{ $item['id'] }}')"
+                                    wire:confirm="Are you sure you want to remove this item from your cart?"
+                                    class="text-red-500 hover:text-red-700 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             @endforeach
@@ -85,18 +168,18 @@
 
         <!-- Cart Summary -->
         <div class="mt-8 bg-gray-50 rounded-lg p-6">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-600">{{ $cartCount }} {{ $cartCount === 1 ? 'item' : 'items' }}</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-2 sm:space-y-0">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <span class="text-xs sm:text-sm text-gray-600">{{ $cartCount }} {{ $cartCount === 1 ? 'item' : 'items' }}</span>
                     <button wire:click="clearCart"
-                            class="text-sm text-red-600 hover:text-red-800 transition-colors"
+                            class="text-xs sm:text-sm text-red-600 hover:text-red-800 transition-colors"
                             onclick="return confirm('Are you sure you want to clear your cart?')">
                         Clear Cart
                     </button>
                 </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-600">Total</p>
-                    <p class="text-2xl font-bold text-gray-900">₦{{ number_format($cartTotal, 2) }}</p>
+                <div class="text-left sm:text-right">
+                    <p class="text-xs sm:text-sm text-gray-600">Total</p>
+                    <p class="text-lg sm:text-2xl font-bold text-gray-900">₦{{ number_format($cartTotal, 2) }}</p>
                 </div>
             </div>
 

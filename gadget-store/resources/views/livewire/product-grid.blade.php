@@ -34,13 +34,10 @@
                 <!-- Status Filter -->
                 <div class="min-w-0">
                     <select wire:model.live="productStatus" class="rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">All Status</option>
-                        <option value="New">New</option>
-                        <option value="Used - Like New">Used - Like New</option>
-                        <option value="Refurbished">Refurbished</option>
-                        <option value="Used">Used</option>
-                        <option value="Brand New">Brand New</option>
-                        <option value="Damaged">Damaged</option>
+                        <option value="">All Conditions</option>
+                        <option value="new">New</option>
+                        <option value="uk_used">UK Used</option>
+                        <option value="refurbished">Refurbished</option>
                     </select>
                 </div>
 
@@ -133,24 +130,24 @@
 
                     <!-- Status Badge -->
                     @php
-                        $status = isset($product['specification']['productcondition']) ? $product['specification']['productcondition'] : 'New';
-                        $statusLower = strtolower($status);
-                        if ($statusLower === 'used - like new') {
-                            $statusClass = 'bg-yellow-100 text-yellow-800';
-                        } elseif ($statusLower === 'brand new' || $statusLower === 'new') {
+                        $status = isset($product['product_status']) ? $product['product_status'] : 'new';
+
+                        if ($status === 'new') {
                             $statusClass = 'bg-green-100 text-green-800';
-                        } elseif ($statusLower === 'refurbished') {
+                            $displayStatus = 'New';
+                        } elseif ($status === 'uk_used') {
+                            $statusClass = 'bg-yellow-100 text-yellow-800';
+                            $displayStatus = 'UK Used';
+                        } elseif ($status === 'refurbished') {
                             $statusClass = 'bg-blue-100 text-blue-800';
-                        } elseif ($statusLower === 'damaged') {
-                            $statusClass = 'bg-red-100 text-red-800';
+                            $displayStatus = 'Refurbished';
                         } else {
                             $statusClass = 'bg-gray-100 text-gray-800';
+                            $displayStatus = ucfirst($status);
                         }
-                        // Debug output (remove after testing)
-                        // echo "<!-- Status: $status | Lower: $statusLower | Class: $statusClass -->";
                     @endphp
                     <div class="absolute top-3 left-3 {{ $statusClass }} px-2 py-1 rounded-md text-xs font-medium">
-                        {{ $status }}
+                        {{ $displayStatus }}
                     </div>
 
                     <!-- Quick Actions -->

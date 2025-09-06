@@ -135,9 +135,9 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-2">⚡ Flash Deals</h2>
                     <p class="text-gray-600">Limited time offers - Don't miss out!</p>
                 </div>
-                <div class="bg-red-100 text-red-800 px-4 py-2 rounded-lg font-semibold" x-data="countdown()" x-text="timeLeft">
-                    Ends in 23:45:12
-                </div>
+                {{-- <div class="bg-red-100 text-red-800 px-4 py-2 rounded-lg font-semibold" x-data="countdown()" x-text="timeLeft">
+
+                </div> --}}
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -221,19 +221,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-3xl font-bold text-gray-900">Featured Products</h2>
-                <a href="/api/products" class="text-blue-600 hover:text-blue-800 font-medium">View API →</a>
             </div>
 
             <!-- Livewire Product Grid Component -->
             <livewire:product-grid />
-
-            <div class="text-center mt-8">
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p class="text-blue-800 text-sm">
-                        <strong>Interactive Filtering:</strong> Use the category dropdown in the search bar above to filter products by category!
-                    </p>
-                </div>
-            </div>
         </div>
     {{-- </section>    <!-- Gadget Carousel -->
     <section class="py-16 bg-gray-50">

@@ -82,7 +82,7 @@ class ProductGrid extends Component
         }
 
         if ($this->productStatus) {
-            $query->whereRaw("LOWER(JSON_UNQUOTE(JSON_EXTRACT(specification, '$.productcondition'))) = LOWER(?)", [$this->productStatus]);
+            $query->where('product_status', $this->productStatus);
         }
 
         if ($this->searchQuery) {

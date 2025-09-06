@@ -56,10 +56,8 @@ class CreateProduct extends Component
 
     public function mount()
     {
-        // Initialize with one empty storage option
-        $this->storage_options = [
-            ['storage' => '', 'price' => '']
-        ];
+        // Don't initialize storage options automatically
+        // Only initialize when user enables has_storage
     }
 
     public function addStorageOption()
@@ -79,10 +77,13 @@ class CreateProduct extends Component
     {
         if (!$this->has_storage) {
             $this->storage_options = [];
-        } else if (empty($this->storage_options)) {
-            $this->storage_options = [
-                ['storage' => '', 'price' => '']
-            ];
+        } else {
+            // Only initialize storage options when user enables storage
+            if (empty($this->storage_options)) {
+                $this->storage_options = [
+                    ['storage' => '', 'price' => '']
+                ];
+            }
         }
     }
 

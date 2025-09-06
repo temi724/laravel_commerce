@@ -38,7 +38,69 @@
 
             <!-- Main Header -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
+                <!-- Mobile Header Layout -->
+                <div class="block md:hidden">
+                    <!-- Top row: Logo and icons -->
+                    <div class="flex items-center justify-between h-16">
+                        <!-- Logo -->
+                        <div class="flex-shrink-0">
+                            <a href="/" class="flex items-center">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <span class="text-white font-bold text-lg">GS</span>
+                                </div>
+                                <span class="ml-3 text-xl font-bold text-gray-900">Gadget Store</span>
+                            </a>
+                        </div>
+
+                        <!-- Right Section -->
+                        <div class="flex items-center space-x-4">
+                            <!-- Cart -->
+                            <a href="{{ route('cart.index') }}" @click.prevent="$dispatch('open-cart')" class="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.5 7.67001V6.70001C7.5 4.45001 9.31 2.24001 11.56 2.03001C14.24 1.77001 16.5 3.88001 16.5 6.51001V7.89001" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M9.00006 22H15.0001C19.0201 22 19.7401 20.39 19.9501 18.43L20.7001 12.43C20.9701 9.99 20.2701 8 16.0001 8H8.00006C3.73006 8 3.03006 9.99 3.30006 12.43L4.05006 18.43C4.26006 20.39 4.98006 22 9.00006 22Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15.4955 12H15.5045" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8.49451 12H8.50349" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span id="cart-counter" class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-1" data-initial-count="@php
+                                        $cart = session()->get('cart', []);
+                                        $count = 0;
+                                        foreach($cart as $item) {
+                                            $count += is_array($item) ? ($item['quantity'] ?? 0) : $item;
+                                        }
+                                        echo $count;
+                                    @endphp">
+                                    @php
+                                        $cart = session()->get('cart', []);
+                                        $count = 0;
+                                        foreach($cart as $item) {
+                                            $count += is_array($item) ? ($item['quantity'] ?? 0) : $item;
+                                        }
+                                        echo $count;
+                                    @endphp
+                                </span>
+                            </a>
+
+                            <!-- User Menu -->
+                            <div class="relative" x-data="{ open: false }">
+                                <button @click="open = !open" class="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition">
+                                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar Row for Mobile -->
+                    <div class="pb-4">
+                        <livewire:search-bar />
+                    </div>
+                </div>
+
+                <!-- Desktop Header Layout -->
+                <div class="hidden md:flex items-center justify-between h-16">
                     <!-- Logo -->
                     <div class="flex-shrink-0">
                         <a href="/" class="flex items-center">
@@ -142,18 +204,21 @@
                                 </div>
                             </div>
 
-                            <!-- Quick Category Links -->
-                            <a href="#" onclick="filterByCategory('')" class="text-gray-700 hover:text-blue-600 transition">All</a>
-                            <a href="#" onclick="filterByCategoryName('Smartphones')" class="text-gray-700 hover:text-blue-600 transition">Smartphones</a>
-                            <a href="#" onclick="filterByCategoryName('Laptops')" class="text-gray-700 hover:text-blue-600 transition">Laptops</a>
-                            <a href="#" onclick="filterByCategoryName('Gaming Consoles')" class="text-gray-700 hover:text-blue-600 transition">Gaming</a>
-                            <a href="#" onclick="filterByCategoryName('Speakers')" class="text-gray-700 hover:text-blue-600 transition">Audio</a>
-                            <a href="#" onclick="filterByCategoryName('Smart Home')" class="text-gray-700 hover:text-blue-600 transition">Smart Home</a>
-                            <a href="#deals" class="text-red-600 font-medium">Deals</a>
+                            <!-- Quick Category Links - Hidden on mobile -->
+                            <div class="hidden sm:flex space-x-4">
+                                <a href="#" onclick="filterByCategory('')" class="text-gray-700 hover:text-blue-600 transition">All</a>
+                                <a href="#" onclick="filterByCategoryName('Smartphones')" class="text-gray-700 hover:text-blue-600 transition">Smartphones</a>
+                                <a href="#" onclick="filterByCategoryName('Laptops')" class="text-gray-700 hover:text-blue-600 transition">Laptops</a>
+                                <a href="#" onclick="filterByCategoryName('Gaming Consoles')" class="text-gray-700 hover:text-blue-600 transition">Gaming</a>
+                                <a href="#" onclick="filterByCategoryName('Speakers')" class="text-gray-700 hover:text-blue-600 transition">Audio</a>
+                                <a href="#" onclick="filterByCategoryName('Smart Home')" class="text-gray-700 hover:text-blue-600 transition">Smart Home</a>
+                                <a href="#deals" class="text-red-600 font-medium">Deals</a>
+                            </div>
                         </div>
 
-                        <div class="text-sm text-gray-600">
-                            📍 Delivering to: <span class="font-medium">Toronto, ON</span>
+                        <!-- Delivery Information - Hidden on mobile -->
+                        <div class="text-sm text-gray-600 hidden sm:block">
+                            📍 We deliver to: <span class="font-medium">All States in Nigeria</span>
                         </div>
                     </div>
                 </nav>

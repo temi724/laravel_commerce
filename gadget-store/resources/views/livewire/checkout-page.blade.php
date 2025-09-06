@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
     <style>
         .animate-fadeIn {
             animation: fadeIn 0.3s ease-in-out;
@@ -21,29 +21,22 @@
     </style>
     <div class="max-w-7xl mx-auto">
         <!-- Beautiful Header Section -->
-        <div class="text-center mb-16">
-            {{-- <div class="inline-block p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-6">
-                <div class="bg-white rounded-xl p-4">
-                    <svg class="w-12 h-12 text-blue-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                </div>
-            </div> --}}
-            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-4">
+        <div class="text-center mb-6 sm:mb-16">
+            <h1 class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-800 bg-clip-text text-transparent mb-2 sm:mb-4">
                 Secure Checkout
             </h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Complete your purchase with confidence. Your information is protected with bank-level security.</p>
+            <p class="text-sm sm:text-base lg:text-xl text-gray-600 max-w-2xl mx-auto px-2 sm:px-4">Complete your purchase with confidence. Your information is protected with bank-level security.</p>
         </div>
 
         <form wire:submit.prevent="placeOrder">
             <!-- Display validation errors -->
             @if ($errors->any())
-                <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+                <div class="mb-4 sm:mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
                     <div class="flex">
-                        <svg class="w-5 h-5 text-red-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-red-400 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                         </svg>
-                        <div>
+                        <div class="min-w-0">
                             <h3 class="text-sm font-bold text-red-800">Please fix the following errors:</h3>
                             <ul class="text-sm text-red-700 mt-2 space-y-1">
                                 @foreach ($errors->all() as $error)
@@ -57,35 +50,35 @@
 
             <!-- Flash Messages -->
             @if (session()->has('message'))
-                <div class="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <div class="mb-4 sm:mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
                     <div class="flex">
-                        <svg class="w-5 h-5 text-blue-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <div>
+                        <div class="min-w-0">
                             <p class="text-sm text-blue-700 font-medium">{{ session('message') }}</p>
                         </div>
                     </div>
                 </div>
             @endif
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 xl:gap-12">
                 <!-- Left side: Checkout Form -->
                 <div class="lg:order-1">
-                    <div class="bg-white backdrop-blur-sm rounded-3xl p-6 transition-all duration-300">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                    <div class="bg-white backdrop-blur-sm rounded-3xl p-4 sm:p-6 transition-all duration-300">
+                        <div class="mb-4 sm:mb-6">
+                            <h2 class="text-lg sm:text-2xl font-bold text-gray-900 mb-2">
                                 <span class="flex items-center">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-2 sm:mr-3 shadow-lg">
+                                        <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                         </svg>
                                     </div>
                                     Shipping Information
                                 </span>
                             </h2>
-                            <p class="text-gray-600 ml-13">Enter your delivery details below</p>
-                            <div class="mt-3 ml-13 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
+                            <p class="text-sm sm:text-base text-gray-600 ml-10 sm:ml-13">Enter your delivery details below</p>
+                            <div class="mt-3 ml-10 sm:ml-13 w-16 sm:w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
                         </div>
 
                         <div class="grid grid-cols-1 gap-4">
@@ -111,29 +104,29 @@
                                 <label class="block text-xs font-bold text-gray-800 uppercase tracking-wider">
                                     Delivery Option *
                                 </label>
-                                <div class="grid grid-cols-2 gap-3">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                     <button type="button"
                                             wire:click="$set('deliveryOption', 'pickup')"
-                                            class="flex items-center justify-center px-4 py-3 text-base border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 {{ $deliveryOption === 'pickup' ? 'border-blue-500 bg-blue-50 text-blue-700 ring-2 ring-blue-200' : 'border-gray-200 bg-gray-50/50 text-gray-700 hover:border-gray-300' }}">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            class="flex items-center justify-center px-2 sm:px-3 lg:px-4 py-3 text-xs sm:text-sm lg:text-base border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 {{ $deliveryOption === 'pickup' ? 'border-blue-500 bg-blue-50 text-blue-700 ring-2 ring-blue-200' : 'border-gray-200 bg-gray-50/50 text-gray-700 hover:border-gray-300' }}">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                         </svg>
                                         <span class="font-medium">Pickup</span>
                                         @if($deliveryOption === 'pickup')
-                                        <svg class="w-5 h-5 ml-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 ml-1 sm:ml-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         @endif
                                     </button>
                                     <button type="button"
                                             wire:click="$set('deliveryOption', 'delivery')"
-                                            class="flex items-center justify-center px-4 py-3 text-base border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 {{ $deliveryOption === 'delivery' ? 'border-blue-500 bg-blue-50 text-blue-700 ring-2 ring-blue-200' : 'border-gray-200 bg-gray-50/50 text-gray-700 hover:border-gray-300' }}">
-                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            class="flex items-center justify-center px-2 sm:px-3 lg:px-4 py-3 text-xs sm:text-sm lg:text-base border-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-100 {{ $deliveryOption === 'delivery' ? 'border-blue-500 bg-blue-50 text-blue-700 ring-2 ring-blue-200' : 'border-gray-200 bg-gray-50/50 text-gray-700 hover:border-gray-300' }}">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                         </svg>
                                         <span class="font-medium">Delivery</span>
                                         @if($deliveryOption === 'delivery')
-                                        <svg class="w-5 h-5 ml-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 ml-1 sm:ml-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
                                         @endif
@@ -222,44 +215,45 @@
 
                 <!-- Right side: Order Summary -->
                 <div class="lg:order-2">
-                    <div class="bg-white backdrop-blur-sm rounded-3xl p-6 transition-all duration-300 lg:sticky lg:top-8">
-                        <div class="mb-6">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                    <div class="bg-white backdrop-blur-sm rounded-3xl p-4 sm:p-6 transition-all duration-300 lg:sticky lg:top-8">
+                        <div class="mb-4 sm:mb-6">
+                            <h2 class="text-lg sm:text-2xl font-bold text-gray-900 mb-2">
                                 <span class="flex items-center">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg">
-                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-2 sm:mr-3 shadow-lg">
+                                        <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                         </svg>
                                     </div>
                                     Order Summary
                                 </span>
                             </h2>
-                            <p class="text-gray-600 ml-13">Review your items and total</p>
-                            <div class="mt-3 ml-13 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
+                            <p class="text-sm sm:text-base text-gray-600 ml-10 sm:ml-13">Review your items and total</p>
+                            <div class="mt-3 ml-10 sm:ml-13 w-16 sm:w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"></div>
                         </div>
 
                         <!-- Beautiful Cart Items -->
-                        <div class="space-y-3 mb-6">
+                        <div class="space-y-3 mb-4 sm:mb-6">
                             @foreach($cartItems as $index => $item)
-                                <div class="bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-2xl p-4 border border-gray-100 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                                <div class="bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-2xl p-3 sm:p-4 border border-gray-100 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center">
                                             <div class="relative overflow-hidden rounded-xl shadow-md">
                                                 <img src="{{ $item['image'] ?? 'https://via.placeholder.com/80' }}"
                                                      alt="{{ $item['name'] }}"
-                                                     class="h-16 w-16 object-cover transform hover:scale-110 transition-transform duration-300">
+                                                     class="h-12 w-12 sm:h-16 sm:w-16 object-cover transform hover:scale-110 transition-transform duration-300">
                                                 <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-xl"></div>
                                             </div>
-                                            <div class="ml-4 flex-1">
-                                                <h3 class="font-bold text-lg text-gray-900 mb-1">
-                                                    {{ $item['name'] }}
+                                            <div class="ml-2 sm:ml-4 flex-1 min-w-0">
+                                                <h3 class="font-bold text-sm sm:text-lg text-gray-900 mb-1">
+                                                    <span class="block sm:hidden">{{ Str::limit($item['name'], 20, '...') }}</span>
+                                                    <span class="hidden sm:block break-words">{{ $item['name'] }}</span>
                                                 </h3>
-                                                <div class="flex items-center space-x-3 mb-2">
-                                                    <span class="text-sm text-gray-600 bg-white px-3 py-1 rounded-full border border-blue-100 shadow-sm">
+                                                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-2 space-y-1 sm:space-y-0">
+                                                    <span class="text-xs sm:text-sm text-gray-600 bg-white px-2 sm:px-3 py-1 rounded-full border border-blue-100 shadow-sm">
                                                         Qty: {{ $item['quantity'] }}
                                                     </span>
                                                     <span class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
-                                                        ₦{{ number_format($item['price'], 2) }} each
+                                                        ₦{{ number_format($item['price'], 0) }} each
                                                     </span>
                                                 </div>
 
@@ -272,9 +266,9 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="text-right">
-                                            <p class="font-bold text-lg text-gray-900">
-                                                ₦{{ number_format($item['subtotal'], 2) }}
+                                        <div class="text-right ml-2">
+                                            <p class="font-bold text-sm sm:text-lg text-gray-900">
+                                                ₦{{ number_format($item['subtotal'], 0) }}
                                             </p>
                                         </div>
                                     </div>
@@ -283,36 +277,36 @@
                         </div>
 
                         <!-- Beautiful Order Total Section -->
-                        <div class="bg-gradient-to-br from-gray-50 to-blue-50/50 rounded-2xl p-6 border border-gray-100 shadow-inner mb-6">
-                            <div class="space-y-3">
+                        <div class="bg-gradient-to-br from-gray-50 to-blue-50/50 rounded-2xl p-4 sm:p-6 border border-gray-100 shadow-inner mb-4 sm:mb-6">
+                            <div class="space-y-2 sm:space-y-3">
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200/70">
-                                    <span class="text-base font-semibold text-gray-700 flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <span class="text-sm sm:text-base font-semibold text-gray-700 flex items-center">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                                         </svg>
                                         Subtotal
                                     </span>
-                                    <span class="font-bold text-lg text-gray-900">₦{{ number_format($cartTotal, 2) }}</span>
+                                    <span class="font-bold text-base sm:text-lg text-gray-900">₦{{ number_format($cartTotal, 0) }}</span>
                                 </div>
                                 @if($deliveryOption === 'delivery')
                                 <div class="flex justify-between items-center py-2 border-b border-gray-200/70">
-                                    <span class="text-base font-semibold text-gray-700 flex items-center">
-                                        <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <span class="text-sm sm:text-base font-semibold text-gray-700 flex items-center">
+                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                         </svg>
                                         Delivery
                                     </span>
-                                    <span class="font-bold text-sm text-orange-600 flex items-center">
+                                    <span class="font-bold text-xs sm:text-sm text-orange-600 flex items-center">
                                         <span class="text-xs bg-orange-100 px-2 py-1 rounded-full">
                                             FREE - Can be negotiated with rider
                                         </span>
                                     </span>
                                 </div>
                                 @endif
-                                <div class="flex justify-between items-center pt-4 border-t-2 border-blue-200">
-                                    <span class="text-xl font-bold text-gray-900">Total</span>
-                                    <span class="text-2xl font-bold text-gray-900">
-                                        ₦{{ number_format($cartTotal, 2) }}
+                                <div class="flex justify-between items-center pt-3 sm:pt-4 border-t-2 border-blue-200">
+                                    <span class="text-lg sm:text-xl font-bold text-gray-900">Total</span>
+                                    <span class="text-lg sm:text-2xl font-bold text-gray-900">
+                                        ₦{{ number_format($cartTotal, 0) }}
                                     </span>
                                 </div>
                             </div>
@@ -339,11 +333,6 @@
                                            wire:model="paymentMethod" value="bank_transfer"
                                            class="sr-only peer" checked>
                                     <label for="bank_transfer" class="flex items-center p-4 bg-blue-50 rounded-xl border-2 border-blue-500 ring-2 ring-blue-200 cursor-pointer hover:border-blue-300 hover:shadow-md transition-all duration-300">
-                                        <div class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-xl mr-4">
-                                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                            </svg>
-                                        </div>
                                         <div class="flex-1">
                                             <h4 class="font-bold text-gray-900 mb-1">Bank Transfer</h4>
                                             <p class="text-sm text-gray-600">Pay directly to our bank account</p>
@@ -372,7 +361,7 @@
                                         class="w-full bg-gradient-to-r from-blue-600 bg-black via-purple-600 to-blue-700 hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 relative overflow-hidden group border-2 border-blue-500 shadow-lg">
                                     <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                                     <span class="flex items-center justify-center relative z-10">
-                                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-6 h-6 mr-2 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                         </svg>
                                         Pay Now - Bank Transfer
@@ -395,21 +384,21 @@
                         <div class="space-y-3">
                             <!-- Note: Submit functionality moved to Pay Now button in payment section -->
 
-                            <div class="flex items-center justify-center space-x-6 text-sm text-gray-600 bg-green-50 py-4 px-6 rounded-2xl border border-green-100">
+                            <div class="flex items-center justify-center space-x-2 sm:space-x-6 text-xs sm:text-sm text-gray-600 bg-green-50 py-4 px-3 sm:px-6 rounded-2xl border border-green-100">
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                                     </svg>
                                     SSL Encrypted
                                 </div>
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                     </svg>
                                     Secure Payment
                                 </div>
                                 <div class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Money Back Guarantee

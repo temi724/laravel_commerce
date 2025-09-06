@@ -18,9 +18,9 @@
             </ol>
         </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 xl:gap-16">
             <!-- Product Images Section -->
-            <div class="sticky top-8">
+            <div class="lg:sticky lg:top-8">
                 <div x-data="{ currentImage: 0 }" class="space-y-4">
                     <!-- Main Image Display -->
                     <div class="aspect-square bg-white rounded-2xl border border-gray-200 overflow-hidden">
@@ -33,14 +33,14 @@
                                     x-transition:enter-end="opacity-100 scale-100"
                                     src="{{ $image }}"
                                     alt="{{ $product->product_name }}"
-                                    class="w-full h-full object-contain p-8 cursor-zoom-in"
+                                    class="w-full h-full object-contain p-4 sm:p-8 cursor-zoom-in"
                                     onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xNzUgMTUwSDE1MFYxNzVIMTI1VjE1MEgxMDBWMjUwSDEyNVYyMjVIMTUwVjI1MEgxNzVWMjI1SDIwMFYyNTBIMjI1VjIyNUgyNTBWMjAwSDI3NVYxNzVIMjUwVjE1MEgyMjVWMTI1SDIwMFYxNTBIMTc1WiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K'; this.classList.add('opacity-50');"
                                 >
                             @endforeach
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-gray-50">
                                 <div class="text-center">
-                                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
                                     <p class="text-gray-400 text-sm font-medium">No image available</p>
@@ -51,12 +51,12 @@
 
                     <!-- Image Thumbnails -->
                     @if($product->images_url && count($product->images_url) > 1)
-                        <div class="flex gap-3 overflow-x-auto pb-1">
+                        <div class="flex gap-2 sm:gap-3 overflow-x-auto pb-1">
                             @foreach($product->images_url as $index => $image)
                                 <button
                                     @click="currentImage = {{ $index }}"
                                     :class="currentImage === {{ $index }} ? 'border-blue-500 ring-2 ring-blue-100' : 'border-gray-200 hover:border-gray-300'"
-                                    class="flex-shrink-0 w-16 h-16 bg-white rounded-lg border-2 overflow-hidden transition-all duration-200"
+                                    class="flex-shrink-0 w-12 h-12 bg-white rounded-lg border-2 overflow-hidden transition-all duration-200"
                                 >
                                     <img src="{{ $image }}" alt="{{ $product->product_name }} thumbnail" class="w-full h-full object-contain p-1">
                                 </button>
@@ -67,8 +67,8 @@
                     <!-- Image Controls -->
                     @if($product->images_url && count($product->images_url) > 0)
                         <div class="flex gap-2">
-                            <button class="flex-1 py-2.5 px-4 text-blue-600 hover:text-blue-700 text-sm font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
-                                <svg class="w-4 h-4 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <button class="flex-1 py-2 sm:py-2.5 px-3 sm:px-4 text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 inline-block mr-1 sm:mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M22 22L20 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M15.5 11.5H15.5093" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -78,8 +78,8 @@
                                 </svg>
                                 Zoom
                             </button>
-                            <button class="flex-1 py-2.5 px-4 text-gray-600 hover:text-gray-700 text-sm font-medium border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                                <svg class="w-4 h-4 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <button class="flex-1 py-2 sm:py-2.5 px-3 sm:px-4 text-gray-600 hover:text-gray-700 text-xs sm:text-sm font-medium border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 inline-block mr-1 sm:mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M8.5 12L17.5 12M17.5 12L14.5 15M17.5 12L14.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
@@ -91,7 +91,7 @@
             </div>
 
             <!-- Product Info Section -->
-            <div class="space-y-6">
+            <div class="space-y-4 lg:space-y-6">
                 <!-- Product Title & Rating -->
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2 text-sm text-gray-500 mb-2">
@@ -129,14 +129,14 @@
 
                 <!-- Pricing Section -->
                 <div class="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-6">
-                    <div class="flex items-baseline space-x-3">
-                        <span id="current-price" class="text-3xl font-bold text-red-600">₦{{ number_format($product->display_price, 2) }}</span>
+                    <div class="flex flex-wrap items-baseline gap-2 sm:gap-3">
+                        <span id="current-price" class="text-2xl sm:text-3xl font-bold text-red-600">₦{{ number_format($product->display_price, 2) }}</span>
                         @if($type === 'deal' && $product->old_price && $product->old_price > $product->price)
-                            <span class="text-lg text-gray-500 line-through">₦{{ number_format($product->old_price, 2) }}</span>
-                            <span class="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">SAVE ₦{{ number_format($product->old_price - $product->price, 2) }}</span>
+                            <span class="text-base sm:text-lg text-gray-500 line-through">₦{{ number_format($product->old_price, 2) }}</span>
+                            <span class="bg-red-100 text-red-800 text-xs sm:text-sm font-medium px-1.5 sm:px-2 py-1 rounded">SAVE ₦{{ number_format($product->old_price - $product->price, 2) }}</span>
                         @elseif($type === 'product' && $product->display_price > 500)
-                            <span id="old-price" class="text-lg text-gray-500 line-through">₦{{ number_format($product->display_price * 1.2, 2) }}</span>
-                            <span id="savings" class="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded">SAVE ₦{{ number_format($product->display_price * 0.2, 2) }}</span>
+                            <span id="old-price" class="text-base sm:text-lg text-gray-500 line-through">₦{{ number_format($product->display_price * 1.2, 2) }}</span>
+                            <span id="savings" class="bg-red-100 text-red-800 text-xs sm:text-sm font-medium px-1.5 sm:px-2 py-1 rounded">SAVE ₦{{ number_format($product->display_price * 0.2, 2) }}</span>
                         @endif
                     </div>
                     @if($type === 'deal')
@@ -235,33 +235,33 @@
                 </div>
 
                 <!-- Purchase Options -->
-                <div class="bg-white border border-gray-200 rounded-2xl p-6">
+                <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6">
                     <!-- Add to Cart Section -->
                     <div class="space-y-4 mb-6">
-                            <div class="flex gap-3">
+                            <div class="flex flex-col sm:flex-row gap-3">
                             <button onclick="
                                 const selectedStorage = document.getElementById('selected-storage')?.value || null;
                                 const selectedPrice = document.getElementById('selected-storage-price')?.value || {{ $product->display_price }};
                                 if (window.Livewire) {
                                     Livewire.dispatch('addToCart', ['{{ $product->id }}', 1, '{{ $type }}', selectedStorage, selectedPrice]);
                                 }
-                            " class="flex-1 bg-blue-600 text-white px-6 py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
-                                <svg class="w-5 h-5 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            " class="flex-1 bg-blue-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.74157 18.5545C4.94119 20 7.17389 20 11.6393 20H12.3605C16.8259 20 19.0586 20 20.2582 18.5545M3.74157 18.5545C2.54194 17.1091 2.9534 14.9146 3.77633 10.5257C4.36155 7.40452 4.65416 5.84393 5.76506 4.92196M3.74157 18.5545L5.76506 4.92196M20.2582 18.5545C21.4578 17.1091 21.0464 14.9146 20.2235 10.5257C19.6382 7.40452 19.3456 5.84393 18.2347 4.92196M20.2582 18.5545L18.2347 4.92196M18.2347 4.92196C17.1238 4 15.5361 4 12.3605 4H11.6393C8.46374 4 6.87596 4 5.76506 4.92196" stroke="currentColor" stroke-width="1.5"/>
                                     <circle cx="9" cy="19.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
                                     <circle cx="15" cy="19.5" r="1.5" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
                                 Add to Cart
                             </button>
-                            <button class="p-4 border-2 border-gray-200 text-gray-600 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <button class="p-3 sm:p-4 border-2 border-gray-200 text-gray-600 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 sm:flex-shrink-0">
+                                <svg class="w-5 h-5 mx-auto sm:mx-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
                             </button>
                         </div>
 
                         <!-- Quick Actions -->
-                        <div class="grid grid-cols-2 gap-3">
+                        {{-- <div class="grid grid-cols-2 gap-3">
                             <button class="py-3 px-4 bg-gray-50 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-100 transition-colors">
                                 <svg class="w-4 h-4 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11.1004 3.00208C8.45025 2.88133 6.34009 2.62947 4.71799 3.49302C3.5479 4.08862 2.88872 5.54745 2.62946 6.03249C2.00009 7.50009 2.00009 9.50009 2.00009 13.5001C2.00009 17.5001 2.00009 19.5001 2.62946 20.9677C3.26074 22.4387 4.56151 23.7394 6.03249 24.3707C7.50009 25.0001 9.50009 25.0001 13.5001 25.0001C17.5001 25.0001 19.5001 25.0001 20.9677 24.3707C22.4387 23.7394 23.7394 22.4387 24.3707 20.9677C25.0001 19.5001 25.0001 17.5001 25.0001 13.5001C25.0001 9.50009 25.0001 7.50009 24.3707 6.03249C23.7394 4.56151 22.4387 3.26074 20.9677 2.62946C19.8338 2.14756 18.4194 2.01741 16.5001 2.00208" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -276,20 +276,12 @@
                                 </svg>
                                 Compare
                             </button>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Benefits Section -->
                     <div class="border-t border-gray-100 pt-4">
                         <div class="space-y-3 text-sm">
-                            <div class="flex items-center gap-3 text-green-700">
-                                <div class="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                                <span class="font-medium">Free shipping on orders over ₦35,000</span>
-                            </div>
                             <div class="flex items-center gap-3 text-blue-700">
                                 <div class="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
                                     <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
