@@ -619,7 +619,7 @@ class SalesManager extends Component
     public function generateInvoice($saleId)
     {
         $sale = Sales::find($saleId);
-        
+
         if (!$sale) {
             $this->addError('invoice', 'Sale not found');
             return;

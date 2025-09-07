@@ -30,6 +30,15 @@ Route::get('/search', function () {
     return view('search.results');
 })->name('search.results');
 
+// Category filter route - redirects to search with category filter
+Route::get('/category/{categoryName}', function ($categoryName) {
+    $category = \App\Models\Category::where('name', $categoryName)->first();
+    if (!$category) {
+        return redirect('/')->with('error', 'Category not found');
+    }
+    return redirect()->route('search.results', ['category_id' => $category->id]);
+})->name('category.filter');
+
 Route::get('/cart', function () {
     return view('cart.index');
 })->name('cart.index');

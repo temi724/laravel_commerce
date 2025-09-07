@@ -160,7 +160,8 @@
                                 </svg>
                             </button>
                             <!-- Add to Cart quick action - hidden on mobile -->
-                            <button wire:click.stop.prevent="addToCart('{{ $product['id'] }}')" class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full hidden sm:flex items-center justify-center hover:bg-white transition-colors" title="Add to cart">
+                                                        <!-- Add to Cart quick action - hidden on mobile -->
+                            <button onclick="event.stopPropagation(); window.location.href='{{ route('product.show', $product['id']) }}';" class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full hidden sm:flex items-center justify-center hover:bg-white transition-colors" title="View product">
                                 <svg class="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 3L2.26491 3.0883C3.58495 3.52832 4.24497 3.74832 4.62248 4.2721C5 4.79587 5 5.49159 5 6.88304V9.5C5 12.7875 5 14.4312 5.90796 15.5376C6.07418 15.7401 6.25989 15.9258 6.46243 16.092C7.56878 17 9.21252 17 12.5 17C15.7875 17 17.4312 17 18.5376 16.092C18.7401 15.9258 18.9258 15.7401 19.092 15.5376C20 14.4312 20 12.7875 20 9.5V8.5C20 7.09554 20 6.39331 19.6532 5.88886C19.3065 5.38441 18.6851 5.18885 17.4422 4.79773L12.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                     <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="currentColor" stroke-width="1.5"/>
@@ -202,7 +203,7 @@
                         </div>
 
                         @if($product['in_stock'])
-                            <button wire:click="addToCart('{{ $product['id'] }}')" onclick="event.stopPropagation(); event.preventDefault();" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-full hidden sm:flex items-center justify-center hover:bg-blue-100 transition-colors group">
+                            <button onclick="event.stopPropagation(); window.location.href='{{ route('product.show', $product['id']) }}';" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-full hidden sm:flex items-center justify-center hover:bg-blue-100 transition-colors group" title="View product">
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 3L2.26491 3.0883C3.58495 3.52832 4.24497 3.74832 4.62248 4.2721C5 4.79587 5 5.49159 5 6.88304V9.5C5 12.7875 5 14.4312 5.90796 15.5376C6.07418 15.7401 6.25989 15.9258 6.46243 16.092C7.56878 17 9.21252 17 12.5 17C15.7875 17 17.4312 17 18.5376 16.092C18.7401 15.9258 18.9258 15.7401 19.092 15.5376C20 14.4312 20 12.7875 20 9.5V8.5C20 7.09554 20 6.39331 19.6532 5.88886C19.3065 5.38441 18.6851 5.18885 17.4422 4.79773L12.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                     <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="currentColor" stroke-width="1.5"/>
@@ -210,10 +211,10 @@
                                 </svg>
                             </button>
                         @else
-                            <button disabled class="w-8 h-8 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center cursor-not-allowed">
+                            <button onclick="event.stopPropagation(); window.location.href='{{ route('product.show', $product['id']) }}';" class="w-8 h-8 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors" title="View product">
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.75781 16.2428L16.2431 7.75781" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M16.2431 16.2428L7.75781 7.75781" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="currentColor" stroke-width="1.5"/>
                                 </svg>
                             </button>
                         @endif

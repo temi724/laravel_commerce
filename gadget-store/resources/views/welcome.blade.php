@@ -72,7 +72,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Shop by Category</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="bg-white rounded-xl border border-gray-100 hover:border-blue-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-blue-50/30">
+                <div onclick="window.location.href='{{ route('category.filter', 'Smartphones') }}'" class="bg-white rounded-xl border border-gray-100 hover:border-blue-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-blue-50/30">
                     <div class="w-16 h-16 mx-auto bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-200 group-hover:scale-110 transition-all duration-200">
                         <svg class="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2H18C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22H6C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z" stroke="currentColor" stroke-width="1.5"/>
@@ -85,7 +85,7 @@
                     <p class="text-sm text-gray-600">Latest models</p>
                 </div>
 
-                <div class="bg-white rounded-xl border border-gray-100 hover:border-purple-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-purple-50/30">
+                <div onclick="window.location.href='{{ route('category.filter', 'Laptops') }}'" class="bg-white rounded-xl border border-gray-100 hover:border-purple-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-purple-50/30">
                     <div class="w-16 h-16 mx-auto bg-purple-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-200 group-hover:scale-110 transition-all duration-200">
                         <svg class="w-8 h-8 text-purple-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2H18C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V15C22 16.8856 22 17.8284 21.4142 18.4142C20.8284 19 19.8856 19 18 19H6C4.11438 19 3.17157 19 2.58579 18.4142C2 17.8284 2 16.8856 2 15V6Z" stroke="currentColor" stroke-width="1.5"/>
@@ -97,7 +97,7 @@
                     <p class="text-sm text-gray-600">Work & Gaming</p>
                 </div>
 
-                <div class="bg-white rounded-xl border border-gray-100 hover:border-green-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-green-50/30">
+                <div onclick="window.location.href='{{ route('category.filter', 'Accessories') }}'" class="bg-white rounded-xl border border-gray-100 hover:border-green-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-green-50/30">
                     <div class="w-16 h-16 mx-auto bg-green-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-200 group-hover:scale-110 transition-all duration-200">
                         <svg class="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 18C2 16.4596 2 15.6893 2.34673 15.1235C2.54074 14.8069 2.80693 14.5407 3.12353 14.3467C3.68934 14 4.45956 14 6 14C7.54044 14 8.31066 14 8.87647 14.3467C9.19307 14.5407 9.45926 14.8069 9.65327 15.1235C10 15.6893 10 16.4596 10 18C10 19.5404 10 20.3107 9.65327 20.8765C9.45926 21.1931 9.19307 21.4593 8.87647 21.6533C8.31066 22 7.54044 22 6 22C4.45956 22 3.68934 22 3.12353 21.6533C2.80693 21.4593 2.54074 21.1931 2.34673 20.8765C2 20.3107 2 19.5404 2 18Z" stroke="currentColor" stroke-width="1.5"/>
@@ -106,11 +106,11 @@
                             <path d="M9 6C10.6569 6 12 4.65685 12 3C12 4.65685 13.3431 6 15 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-green-900 transition-colors">Audio</h3>
+                    <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-green-900 transition-colors">Accessories</h3>
                     <p class="text-sm text-gray-600">Headphones & Speakers</p>
                 </div>
 
-                <div class="bg-white rounded-xl border border-gray-100 hover:border-red-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-red-50/30">
+                <div onclick="window.location.href='{{ route('category.filter', 'Gaming') }}'" class="bg-white rounded-xl border border-gray-100 hover:border-red-200 transition-all duration-200 p-6 text-center group cursor-pointer hover:bg-red-50/30">
                     <div class="w-16 h-16 mx-auto bg-red-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-200 group-hover:scale-110 transition-all duration-200">
                         <svg class="w-8 h-8 text-red-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 14.5C2 11.2617 2 9.64256 2.87868 8.32128C3.75736 7 5.24264 7 8.21321 7H15.7868C18.7574 7 20.2426 7 21.1213 8.32128C22 9.64256 22 11.2617 22 14.5V15.5C22 18.7383 22 20.3574 21.1213 21.6787C20.2426 23 18.7574 23 15.7868 23H8.21321C5.24264 23 3.75736 23 2.87868 21.6787C2 20.3574 2 18.7383 2 15.5V14.5Z" stroke="currentColor" stroke-width="1.5"/>
