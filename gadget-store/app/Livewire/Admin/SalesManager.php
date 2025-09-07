@@ -615,4 +615,18 @@ class SalesManager extends Component
             'sales' => $sales
         ]);
     }
+
+    public function generateInvoice($saleId)
+    {
+        $sale = Sales::find($saleId);
+        
+        if (!$sale) {
+            $this->addError('invoice', 'Sale not found');
+            return;
+        }
+
+        // Use JavaScript to open invoice in new tab
+        $invoiceUrl = route('admin.invoice', ['sale' => $saleId]);
+        $this->js("window.open('$invoiceUrl', '_blank')");
+    }
 }

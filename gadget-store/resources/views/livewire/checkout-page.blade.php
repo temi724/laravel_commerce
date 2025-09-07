@@ -134,6 +134,16 @@
                                 </div>
                             </div>
 
+                            <!-- Phone Number Field (for both pickup and delivery) -->
+                            <div class="space-y-1">
+                                <label for="phone" class="block text-xs font-bold text-gray-800 uppercase tracking-wider">
+                                    Phone Number *
+                                </label>
+                                <input type="tel" id="phone" wire:model.defer="phone"
+                                       class="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 bg-gray-50/50 focus:bg-white hover:border-gray-300 hover:shadow-md"
+                                       placeholder="+234 (800) 123-4567" required>
+                            </div>
+
                             <!-- Conditional Address Fields (only show if delivery is selected) -->
                             @if($deliveryOption === 'delivery')
                             <div class="space-y-4 animate-fadeIn">
@@ -200,15 +210,6 @@
                                 </div>
                             </div>
                             @endif
-
-                            <div class="space-y-1">
-                                <label for="phone" class="block text-xs font-bold text-gray-800 uppercase tracking-wider">
-                                    Phone Number *
-                                </label>
-                                <input type="tel" id="phone" wire:model.defer="phone"
-                                       class="w-full px-4 py-3 text-base border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-300 bg-gray-50/50 focus:bg-white hover:border-gray-300 hover:shadow-md"
-                                       placeholder="+234 (800) 123-4567" required>
-                            </div>
                         </div>
                     </div>
                 </div>

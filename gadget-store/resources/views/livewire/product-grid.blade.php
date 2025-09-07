@@ -98,7 +98,7 @@
     </div>
 
     <!-- Product Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 mb-8"
          x-data="infiniteScroll()"
          x-init="init()">
         @foreach($products as $product)
@@ -159,8 +159,8 @@
                                     <path d="M12.62 20.81C12.28 20.93 11.72 20.93 11.38 20.81C8.48 19.82 2 15.69 2 8.69C2 5.6 4.49 3.1 7.56 3.1C9.38 3.1 10.99 3.98 12 5.34C13.01 3.98 14.63 3.1 16.44 3.1C19.51 3.1 22 5.6 22 8.69C22 15.69 15.52 19.82 12.62 20.81Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </button>
-                            <!-- Add to Cart quick action -->
-                            <button wire:click.stop.prevent="addToCart('{{ $product['id'] }}')" class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors" title="Add to cart">
+                            <!-- Add to Cart quick action - hidden on mobile -->
+                            <button wire:click.stop.prevent="addToCart('{{ $product['id'] }}')" class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full hidden sm:flex items-center justify-center hover:bg-white transition-colors" title="Add to cart">
                                 <svg class="w-4 h-4 text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 3L2.26491 3.0883C3.58495 3.52832 4.24497 3.74832 4.62248 4.2721C5 4.79587 5 5.49159 5 6.88304V9.5C5 12.7875 5 14.4312 5.90796 15.5376C6.07418 15.7401 6.25989 15.9258 6.46243 16.092C7.56878 17 9.21252 17 12.5 17C15.7875 17 17.4312 17 18.5376 16.092C18.7401 15.9258 18.9258 15.7401 19.092 15.5376C20 14.4312 20 12.7875 20 9.5V8.5C20 7.09554 20 6.39331 19.6532 5.88886C19.3065 5.38441 18.6851 5.18885 17.4422 4.79773L12.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                     <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="currentColor" stroke-width="1.5"/>
@@ -187,14 +187,14 @@
 
                     <!-- Description -->
                     @if(isset($product['overview']) && $product['overview'])
-                        <p class="text-xs text-gray-600 mb-3 line-clamp-2">
+                        <p class="text-xs text-gray-600 mb-2 sm:mb-3 line-clamp-1 sm:line-clamp-2">
                             {{ $product['overview'] }}
                         </p>
                     @endif
 
                     <!-- Price -->
                     <div class="flex items-center justify-between">
-                        <div class="text-lg font-bold text-gray-900">
+                        <div class="text-sm sm:text-lg font-bold text-gray-900">
                             ₦{{ number_format($product['display_price'], 2) }}
                             @if(!empty($product['default_storage']))
                                 <span class="text-xs text-gray-500 block">{{ $product['default_storage'] }}</span>
@@ -202,7 +202,7 @@
                         </div>
 
                         @if($product['in_stock'])
-                            <button wire:click="addToCart('{{ $product['id'] }}')" onclick="event.stopPropagation(); event.preventDefault();" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-100 transition-colors group">
+                            <button wire:click="addToCart('{{ $product['id'] }}')" onclick="event.stopPropagation(); event.preventDefault();" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-full hidden sm:flex items-center justify-center hover:bg-blue-100 transition-colors group">
                                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 3L2.26491 3.0883C3.58495 3.52832 4.24497 3.74832 4.62248 4.2721C5 4.79587 5 5.49159 5 6.88304V9.5C5 12.7875 5 14.4312 5.90796 15.5376C6.07418 15.7401 6.25989 15.9258 6.46243 16.092C7.56878 17 9.21252 17 12.5 17C15.7875 17 17.4312 17 18.5376 16.092C18.7401 15.9258 18.9258 15.7401 19.092 15.5376C20 14.4312 20 12.7875 20 9.5V8.5C20 7.09554 20 6.39331 19.6532 5.88886C19.3065 5.38441 18.6851 5.18885 17.4422 4.79773L12.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                     <path d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="currentColor" stroke-width="1.5"/>

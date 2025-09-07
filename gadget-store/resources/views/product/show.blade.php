@@ -99,8 +99,8 @@
                         <span class="font-medium text-blue-600">{{ explode(' ', $product->product_name)[0] ?? 'Generic' }}</span>
                         <span>•</span>
                         <span>Model: {{ $product->id }}</span>
-                        <span>•</span>
-                        <span>Web Code: {{ substr($product->id, -8) }}</span>
+                        <span class="hidden sm:inline">•</span>
+                        <span class="hidden sm:inline">Web Code: {{ substr($product->id, -8) }}</span>
                     </div>
 
                     <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">{{ $product->product_name }}</h1>

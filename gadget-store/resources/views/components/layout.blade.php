@@ -24,11 +24,9 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center py-2">
                         <div class="flex items-center space-x-6">
-                            <span>🚚 Free shipping on orders over ₦50,000</span>
-                            <span>📞 1-800-GADGETS</span>
+                            <span> 1-800-GADGETS</span>
                         </div>
                         <div class="flex items-center space-x-4">
-                            <a href="#" class="hover:text-blue-200 transition">Account</a>
                             <a href="#" class="hover:text-blue-200 transition">Track Order</a>
                             <a href="#" class="hover:text-blue-200 transition">Help</a>
                         </div>
@@ -145,23 +143,6 @@
                                 @endphp
                             </span>
                         </a>
-
-                        <!-- User Menu -->
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition">
-                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <span class="hidden sm:block">Account</span>
-                            </button>
-
-                            <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign In</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Create Account</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -410,7 +391,7 @@
                     const flashBody = document.getElementById('flash-body');
 
                     if (flashTitle) flashTitle.textContent = title;
-                    if (flashBody) flashBody.textContent = `You now have ${count} item${count === 1 ? '' : 's'} in your cart.`;
+                    if (flashBody) flashBody.textContent = 'Item added to cart';
 
                     if (toast) {
                         toast.style.display = 'block';

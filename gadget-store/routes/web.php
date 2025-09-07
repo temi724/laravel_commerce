@@ -87,4 +87,11 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/products/{product}/edit', App\Livewire\Admin\EditProduct::class)->name('admin.products.edit');
     Route::get('/sales', App\Livewire\Admin\SalesManager::class)->name('admin.sales');
     Route::get('/orders', App\Livewire\Admin\OrderManager::class)->name('admin.orders');
+    Route::get('/invoice/{sale}', function ($saleId) {
+        $sale = \App\Models\Sales::find($saleId);
+        if (!$sale) {
+            abort(404);
+        }
+        return view('admin.invoice', compact('sale'));
+    })->name('admin.invoice');
 });
